@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import fire from "../config/fire-config";
 import CreatePost from "../components/CreatePost";
-import Header from "../components/mainPage/Header";
 import Link from "next/link";
-import Emergency from "./mainSections/Resources";
+import Layout, { siteTitle } from "../components/Layout";
 
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
@@ -21,14 +20,15 @@ const Home = () => {
         setBlogs(blogs);
       });
   }, []);
-  console.log(blogs)
+  
   return (
-    <div>
-      <Head>
-        <title>UTab App</title>
-      </Head>
-      <Header />
+    <Layout home>
+    
+      {/* <Head>
+        <title>{siteTitle}</title>
+      </Head> */}
       
+      <hr />
       <h1>Blog</h1>
       <ul>
         {blogs.map((blog) => (
@@ -40,10 +40,10 @@ const Home = () => {
         ))}
       </ul>
       <CreatePost />
-      <Link href={"/mainSections/Resources"}>
-       <h3>Legal Help</h3>
+      <Link href={"/mainSections/Resources"} passHref>
+        <h3>Legal Help</h3>
       </Link>
-    </div>
+    </Layout>
   );
 };
 export default Home;

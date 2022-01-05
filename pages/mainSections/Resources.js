@@ -1,8 +1,9 @@
 import React from "react";
-import Link from "next/link";
+import Layout from "../../components/Layout";
 
 const Resources = () => {
   return (
+    <Layout>
     <div>
       <h2>
         These resources can be invaluable assets for social workers engaging
@@ -25,12 +26,14 @@ const Resources = () => {
         href="https://www.onlinemswprograms.com/resources/social-issues/support-resources-immigrants-refugees/"
         style={{ color: "blue" }}
         target={"_blank"}
+        rel="noreferrer"
       >
         Follow the Link
       </a>
       <hr />
-      <Link href="/">Back home</Link>
+      
     </div>
+    </Layout>
   );
 };
 

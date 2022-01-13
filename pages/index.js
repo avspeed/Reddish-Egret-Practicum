@@ -42,7 +42,13 @@ const Home = () => {
       <CreatePost />
       <Link href={"/mainSections/Resources"} passHref>
         <h3>Legal Help</h3>
+        
       </Link>
+      <Link href={"/mainSections/housingfood"} passHref>
+        <h3>Housing And Food</h3>
+        
+      </Link>
+      
     </Layout>
   );
 };

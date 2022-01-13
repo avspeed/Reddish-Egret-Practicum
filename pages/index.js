@@ -48,6 +48,12 @@ const Home = () => {
         <h3>Housing And Food</h3>
         
       </Link>
+
+
+      <Link href={"/mainSections/educationlanguage"} passHref>
+        <h3>Education and Language</h3>
+        
+      </Link>
       
     </Layout>
   );

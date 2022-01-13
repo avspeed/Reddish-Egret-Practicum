@@ -4,8 +4,14 @@ import Footer from "./mainPage/Footer";
 
 export const siteTitle = "UTab app";
 
-export default function Layout({ children, home }) {
- 
+export default function Layout({
+  home,
+  children,
+  loggedIn,
+  handleLogout,
+  notification,
+}) { 
+  
   return (
     <div>
       <Head>
@@ -21,8 +27,8 @@ export default function Layout({ children, home }) {
         <meta name="og:title" content={siteTitle} />
         <title>{siteTitle}</title>
       </Head>
-
-      <Header />
+      {notification}
+      <Header loggedIn={loggedIn} handleLogout={handleLogout} />
 
       <main>{children}</main>
 

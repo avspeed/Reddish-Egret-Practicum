@@ -58,7 +58,8 @@ export default function ProfilePage() {
   const handleClick = (event) => {
     console.log("user data successfully added to db");
     event.preventDefault();
-    fire.firestore().collection("users").add({
+    //TODO add user id
+    fire.firestore().collection("users").doc('userUid').set({
       userName: userName,
       language: lang,
       location: location,

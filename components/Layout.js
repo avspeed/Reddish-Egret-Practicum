@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Header from "./mainPage/Header";
 import Footer from "./mainPage/Footer";
+import { useAuth } from "../pages/authUserContext";
 
 export const siteTitle = "UTab app";
 
@@ -11,7 +12,8 @@ export default function Layout({
   handleLogout,
   notification,
 }) { 
-  
+  const {authUser, loading} = useAuth()
+  /* console.log(authUser.uid, loading, authUser.email) */
   return (
     <div>
       <Head>
@@ -28,7 +30,7 @@ export default function Layout({
         <title>{siteTitle}</title>
       </Head>
       {notification}
-      <Header loggedIn={loggedIn} handleLogout={handleLogout} />
+      <Header loggedIn={!loading} handleLogout={handleLogout} />
 
       <main>{children}</main>
 

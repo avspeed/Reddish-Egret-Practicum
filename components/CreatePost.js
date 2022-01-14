@@ -34,13 +34,13 @@ const CreatePost = () => {
       <form onSubmit={handleSubmit}>
         <div>
           Title<br />
-          <input type="text" value={title} 
-           onChange={({target}) => setTitle(target.value)} />
+          <input type="text" value={title}
+            onChange={({ target }) => setTitle(target.value)} />
         </div>
         <div>
           Content<br />
-          <textarea value={content} 
-           onChange={({target}) => setContent(target.value)} />
+          <textarea value={content}
+            onChange={({ target }) => setContent(target.value)} />
         </div>
         <button type="submit">Save</button>
       </form>

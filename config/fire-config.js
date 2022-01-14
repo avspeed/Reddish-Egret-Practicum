@@ -1,6 +1,9 @@
 import firebase from 'firebase';
-/* import firebase from 'firebase/app';
-import 'firebase/firestore'; */
+import "firebase/storage";
+
+
+import 'firebase/firestore';
+
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -18,5 +21,9 @@ const firebaseConfig = {
     if (!/already exists/.test(err.message)) {
       console.error('Firebase initialization error', err.stack)}
   }
+  
+  const storage = firebase.storage()
   const fire = firebase;
-  export default fire;
+  export {storage, fire as default }
+
+ 

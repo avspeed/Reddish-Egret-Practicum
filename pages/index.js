@@ -11,26 +11,18 @@ const Home = () => {
   /* console.log(authUser, loading) */
   console.log(useAuth());
   return (
-
     <>
       {notification}
       <Description />
-    </>
- 
-  
+
       <Link href={"/mainSections/housingfood"} passHref>
         <h3>Housing And Food</h3>
-        
       </Link>
-
 
       <Link href={"/mainSections/educationlanguage"} passHref>
         <h3>Education and Language</h3>
-        
       </Link>
-      
- 
-
+    </>
   );
 };
 export default Home;

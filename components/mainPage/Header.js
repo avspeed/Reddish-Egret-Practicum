@@ -22,7 +22,7 @@ const Header = ({ loggedIn }) => {
       <Image src="/images/logo.png " width={100} height={100} alt="logo" />
       <nav>
         <Link href={"/"}> Home </Link>
-        {loggedIn ? (
+        {!loggedIn ? (
           <button onClick={handleLogout}> Logout </button>
         ) : (
           <div>

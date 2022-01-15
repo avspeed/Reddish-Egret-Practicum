@@ -23,10 +23,10 @@ const Login = () => {
       });
     setUsername("");
     setPassword("");
-    router.push("/");
+    router.push("/mainBoard");
   };
   return (
-    <Layout>
+    
       <div>
         <h1>Login Here</h1>
         {notify}
@@ -50,7 +50,7 @@ const Login = () => {
           <button type="submit">Login</button>
         </form>
       </div>
-    </Layout>
+    
   );
 };
 export default Login;

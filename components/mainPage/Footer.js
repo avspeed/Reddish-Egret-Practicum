@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer>Footer</footer>
+    <footer> <small>&copy; 2022 UTab App</small></footer>
     
   );
 };

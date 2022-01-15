@@ -1,6 +1,5 @@
 import firebase from 'firebase';
-/* import firebase from 'firebase/app';
-import 'firebase/firestore'; */
+import 'firebase/auth';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -19,4 +18,5 @@ const firebaseConfig = {
       console.error('Firebase initialization error', err.stack)}
   }
   const fire = firebase;
+  export let db = firebase.database();
   export default fire;

@@ -1,7 +1,8 @@
 import { useState } from "react";
-import fire from "../../config/fire-config";
+import fire, {db} from "../../config/fire-config";
+import { collection, addDoc, onSnapshot } from 'firebase/firestore';
 import { useRouter } from "next/router";
-import Layout from "../../components/Layout";
+
 
 const Register = () => {
   const router = useRouter();
@@ -9,11 +10,12 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [passConf, setPassConf] = useState("");
   const [notification, setNotification] = useState("");
+console.log(db)
 
   const handleLogin = (e) => {
     e.preventDefault();
     if (password !== passConf) {
-      setNotification("Password and password confirmation does not   match");
+      setNotification("Password and password confirmation does not match");
       setTimeout(() => {
         setNotification("");
       }, 2000);
@@ -24,13 +26,19 @@ const Register = () => {
     fire
       .auth()
       .createUserWithEmailAndPassword(userName, password)
+      .then(cred => {
+        console.log(cred)
+        return db.collection('users').addDoc(cred.user.uid).set({
+          test: 'testing'
+        })
+      })
       .catch((err) => {
         console.log(err.code, err.message);
       });
-    router.push("/");
+    router.push("/mainBoard");
   };
   return (
-    <Layout>
+
       <div>
         <h1>Join our community</h1>
         {notification}
@@ -41,6 +49,7 @@ const Register = () => {
             value={userName}
             onChange={({ target }) => setUsername(target.value)}
             placeholder="Email"
+            required
           />
           <br />
           <label>Password:</label>
@@ -49,6 +58,7 @@ const Register = () => {
             value={password}
             onChange={({ target }) => setPassword(target.value)}
             placeholder="Password"
+            required
           />
           <br />
           <label>Password conf:</label>
@@ -62,7 +72,7 @@ const Register = () => {
           <button type="submit">Register</button>
         </form>
       </div>
-    </Layout>
+    
   );
 };
 export default Register;

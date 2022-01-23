@@ -1,4 +1,5 @@
 export default [
+    {"value": "Select a Language"},
     {"value":"English","code":"EN"},
     {"value":"Japanese","code":"JA"},
     {"value":"Afrikaans","code":"AF"},

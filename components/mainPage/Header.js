@@ -2,15 +2,11 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import fire from "../../config/fire-config";
+import { useAuth } from "../context/authUserContext";
 
-const Header = ({ loggedIn }) => {
-  
-  const handleLogout = () => {
-    fire
-      .auth()
-      .signOut()
-      
-  };
+const Header = () => {
+  const { authUser, loading, signOut } = useAuth();
+
   return (
     <header
       style={{
@@ -22,8 +18,8 @@ const Header = ({ loggedIn }) => {
       <Image src="/images/logo.png " width={100} height={100} alt="logo" />
       <nav>
         <Link href={"/"}> Home </Link>
-        {!loggedIn ? (
-          <button onClick={handleLogout}> Logout </button>
+        {!loading && authUser ? (
+          <button onClick={signOut}> Sign out </button>
         ) : (
           <div>
             <Link href={"/users/login"}> Login </Link> |

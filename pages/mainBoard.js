@@ -1,27 +1,21 @@
-import React from "react";
-import fire from "../config/fire-config";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useAuth } from "../components/context/authUserContext";
 
 const MainBoard = () => {
+  const { authUser, loading } = useAuth();
+  const router = useRouter();
 
-  const handleClick = (event) => {
-    console.log("click")
-    event.preventDefault()
-    fire.firestore()
-      .collection('users')
-      .add({
-        userName: "userName Alena",
-        location: "location",
-        img: "link to img",
-        hobbies: [],
-        origin: "origin",
-        bio: "bio"
-      })
-  }
+  // Listen for changes on loading and authUser, redirect if needed
+  useEffect(() => {
+    if (loading && !authUser) router.push("/");
+  }, [authUser, loading, router]);
+
   return (
     <>
+      <div>You are logged in</div>
       <div>This is a main board where you see all posts</div>
-      <button onClick={handleClick}>Click to create user</button>
-      </>
+    </>
   );
 };
 

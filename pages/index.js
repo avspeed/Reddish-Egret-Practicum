@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import fire from "../config/fire-config";
-import CreatePost from "../components/CreatePost";
+
 import Link from "next/link";
 import Layout, { siteTitle } from "../components/Layout";
 
@@ -20,14 +20,14 @@ const Home = () => {
         setBlogs(blogs);
       });
   }, []);
-  
+
   return (
     <Layout home>
-    
+
       {/* <Head>
         <title>{siteTitle}</title>
       </Head> */}
-      
+
       <hr />
       <h1>Blog</h1>
       <ul>
@@ -39,7 +39,7 @@ const Home = () => {
           </li>
         ))}
       </ul>
-      <CreatePost />
+
       <Link href={"/mainSections/Resources"} passHref>
         <h3>Legal Help</h3>
       </Link>

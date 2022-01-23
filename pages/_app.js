@@ -1,6 +1,6 @@
 import Layout from "../components/Layout";
 import "../styles/globals.css";
-import { AuthUserProvider } from "./authUserContext";
+import { AuthUserProvider } from "../components/context/authUserContext";
 
 function MyApp({ Component, pageProps }) {
   return (

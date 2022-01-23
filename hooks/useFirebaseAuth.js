@@ -1,39 +1,56 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 
-import fire from '../config/fire-config';
-
+import fire from "../config/fire-config";
 
 const formatAuthUser = (user) => ({
   uid: user.uid,
-  email: user.email
+  email: user.email,
 });
 
 export default function useFirebaseAuth() {
-  const [authUser, setAuthUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [authUser, setAuthUser] = useState(null); //null means that user hasn't logged in
+  const [loading, setLoading] = useState(true); //true means the FB fetching the data
 
   const authStateChanged = async (authState) => {
+   //check if the user not logged in
     if (!authState) {
-      setAuthUser(null)
-      setLoading(false)
+      setAuthUser(null);
+      setLoading(true);
       return;
     }
 
-    setLoading(true)
-    var formattedUser = formatAuthUser(authState);
-    setAuthUser(formattedUser);    
+    let formattedUser = formatAuthUser(authState);
+
+    setAuthUser(formattedUser);
     setLoading(false);
   };
 
-// listen for Firebase state change
+  const clear = () => {
+    setAuthUser(null);
+    setLoading(true);
+  };
+
+  const signInWithEmailAndPassword = (email, password) =>
+    fire.auth().signInWithEmailAndPassword(email, password);
+
+  const createUserWithEmailAndPassword = (email, password) =>
+    fire.auth().createUserWithEmailAndPassword(email, password);
+
+  const signOut = () => {
+    fire.auth().signOut().then(clear());
+  };
+
+  // listen for Firebase state change
   useEffect(() => {
-    const unsubscribe = fire.auth().onAuthStateChanged(authStateChanged);
-    console.log('in here')
+    const unsubscribe = fire.auth().onAuthStateChanged(authStateChanged); //Adds an observer for changes to the user's sign-in state
     return () => unsubscribe();
   }, []);
 
   return {
     authUser,
-    loading
+    loading,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut,
   };
 }

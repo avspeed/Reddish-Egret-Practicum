@@ -15,11 +15,11 @@ const Home = () => {
       {notification}
       <Description />
 
-      <Link href={"/mainSections/housingfood"} passHref>
+      <Link href={"/mainPageSections/housingfood"} passHref>
         <h3>Housing And Food</h3>
       </Link>
 
-      <Link href={"/mainSections/educationlanguage"} passHref>
+      <Link href={"/mainPageSections/educationlanguage"} passHref>
         <h3>Education and Language</h3>
       </Link>
     </>

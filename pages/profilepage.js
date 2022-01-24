@@ -5,8 +5,11 @@ import { CountryDropdown } from "react-country-region-selector";
 import Languages from "../components/Languages";
 import "@firebase/auth";
 import { useRouter } from "next/router";
+import {useAuth} from "../components/context/authUserContext"
 
 export default function ProfilePage() {
+  const { authUser} = useAuth()
+console.log(authUser)
   const router = useRouter();
 
   //useState hooks for form elements
@@ -14,7 +17,7 @@ export default function ProfilePage() {
   const [lang, setLang] = useState("");
   const [location, setLocation] = useState("");
   const [countryOrg, setCountryOrg] = useState("");
-  const [hobbies, setHobbies] = useState();
+  const [hobbies, setHobbies] = useState("");
   const [image, setImage] = useState("");
   const [url, setUrl] = useState(null);
 
@@ -64,7 +67,7 @@ export default function ProfilePage() {
     );
 
     //TODO add user id
-    fire.firestore().collection("users").doc("userUid").set({
+    fire.firestore().collection("users").doc(authUser.uid).set({
       userName: userName,
       language: lang,
       location: location,

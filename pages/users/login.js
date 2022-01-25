@@ -16,7 +16,7 @@ const Login = () => {
 
     signInWithEmailAndPassword(email, password)
       .then((authUser) => {
-        router.push("/profilepage");
+        router.push("/mainBoard");
       })
       .catch((err) => {
         console.log(err.code, err.message);

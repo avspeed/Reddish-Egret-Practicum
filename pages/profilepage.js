@@ -5,11 +5,19 @@ import { CountryDropdown } from "react-country-region-selector";
 import Languages from "../components/Languages";
 import "@firebase/auth";
 import { useRouter } from "next/router";
-import {useAuth} from "../components/context/authUserContext"
+import { useAuth } from "../components/context/authUserContext";
+import TagsInput from "../components/TagsHobbies";
+
+// Popup function to redirect after updating profile
+const popUp = () => {
+  alert("Updated Successfully!!");
+  /* setTimeout(() => {
+    alert("Profile Updated Successfully");
+  }, 3000); */
+};
 
 export default function ProfilePage() {
-  const { authUser} = useAuth()
-console.log(authUser)
+  const { authUser } = useAuth();
   const router = useRouter();
 
   //useState hooks for form elements
@@ -17,36 +25,46 @@ console.log(authUser)
   const [lang, setLang] = useState("");
   const [location, setLocation] = useState("");
   const [countryOrg, setCountryOrg] = useState("");
-  const [hobbies, setHobbies] = useState("");
+  const [hobbies, setHobbies] = useState([]);
   const [image, setImage] = useState("");
   const [url, setUrl] = useState(null);
 
   //To choose the image file
-
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
+
+      const uploadTask = storage.ref(`images/${image.name}`).put(image);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          storage
+            .ref(`images/${image.name}`)
+            //.child(image.name)
+            .getDownloadURL()
+            .then((url) => {
+              setUrl(url);
+            });
+        }
+      );
     }
   };
   // To delete the selected image file
   const removeSelectedImage = () => {
     setImage("");
-  };
-  // Popup function to redirect after updating profile
-  const popUp = () => {
-    // alert('Updated Successfully!!');
-    //router.push('/mainBoard');
-    setTimeout(() => {
-      alert("Profile Updated Successfully");
-      router.push("/mainBoard");
-    }, 3000);
+    setUrl("");
   };
 
   // Form submission function
   const handleClick = (event) => {
-    console.log("user data successfully added to db");
+    console.log(`user data successfully added to db under ${authUser.uid}`);
     event.preventDefault();
-    // image upload to firebase/storage
+    /*  // image upload to firebase/storage
     const uploadTask = storage.ref(`images/${image.name}`).put(image);
 
     uploadTask.on(
@@ -64,9 +82,8 @@ console.log(authUser)
             setUrl(url);
           });
       }
-    );
+    ); */
 
-    //TODO add user id
     fire.firestore().collection("users").doc(authUser.uid).set({
       userName: userName,
       language: lang,
@@ -75,11 +92,17 @@ console.log(authUser)
       url: url,
       hobbies: hobbies,
     });
+    popUp();
+    router.push("/mainBoard") 
+  };
+
+  const selectedTags = (tags) => {
+    setHobbies(tags);
   };
 
   return (
     <div>
-      <form onSubmit={handleClick}>
+      <fieldset>
         <div style={{ display: "block" }}>
           <input
             type="file"
@@ -138,19 +161,14 @@ console.log(authUser)
           />
         </div>
         <br />
-        <label htmlFor="hobbies">Hobbies</label>
-        <input
-          type="text"
-          id="hobbies"
-          value={hobbies}
-          onChange={(target) => setHobbies(target.target.value)}
-        />
-        <button type="submit" onClick={popUp}>
+        <TagsInput selectedTags={selectedTags} />
+        <br />
+        <button type="submit" onClick={handleClick}>
           Save
         </button>
         &nbsp;
-        <button onClick={() => router.push("/users/login")}>Cancel</button>
-      </form>
+        <button onClick={() => router.push("/mainBoard")}>Cancel</button>
+      </fieldset>
     </div>
   );
 }

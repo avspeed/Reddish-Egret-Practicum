@@ -29,7 +29,7 @@ const Register = () => {
     createUserWithEmailAndPassword(email, password)
       .then((authUser) => {
         console.log("Success. The user is created in Firebase");
-        router.push("/mainBoard");
+        router.push("/profilepage");
       })
       // An error occurred. Set error message to be displayed to user
       .catch((err) => {

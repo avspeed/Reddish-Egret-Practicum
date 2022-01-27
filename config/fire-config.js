@@ -20,6 +20,6 @@ const firebaseConfig = {
       console.error('Firebase initialization error', err.stack)}
   }
   const fire = firebase;
-  export let db = firebase.database();
+  export let db = firebase.firestore();
   export const storage = firebase.storage();
   export default fire;

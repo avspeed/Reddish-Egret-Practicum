@@ -1,40 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import fire from "../config/fire-config";
-import { storage } from "../config/fire-config";
+import "firebase/firestore";
+import { storage, db } from "../config/fire-config";
 import { CountryDropdown } from "react-country-region-selector";
 import Languages from "../components/Languages";
 import "@firebase/auth";
 import { useRouter } from "next/router";
 import { useAuth } from "../components/context/authUserContext";
 import TagsInput from "../components/TagsHobbies";
+import Image from "next/image";
 
 // Popup function to redirect after updating profile
 const popUp = () => {
   alert("Updated Successfully!!");
-  /* setTimeout(() => {
-    alert("Profile Updated Successfully");
-  }, 3000); */
 };
 
 export default function ProfilePage() {
   const { authUser } = useAuth();
   const router = useRouter();
 
+  const [user, setUser] = useState({
+    id: "",
+    userName: "",
+    country: "",
+    hobbies: [],
+    language: "",
+    location: "",
+    url: "",
+    image: "",
+  });
+
   //useState hooks for form elements
   const [userName, setUserName] = useState("");
-  const [lang, setLang] = useState("");
+  const [language, setLang] = useState("");
   const [location, setLocation] = useState("");
   const [countryOrg, setCountryOrg] = useState("");
   const [hobbies, setHobbies] = useState([]);
   const [image, setImage] = useState("");
-  const [url, setUrl] = useState(null);
+  const [url, setUrl] = useState("");
 
   //To choose the image file
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-
-      const uploadTask = storage.ref(`images/${image.name}`).put(image);
+      const userImage = e.target.files[0];
+      console.log(e.target.files[0]);
+      setImage(userImage);
+      console.log(image);
+      const uploadTask = storage.ref(`images/${userImage.name}`).put(userImage);
 
       uploadTask.on(
         "state_changed",
@@ -44,10 +56,11 @@ export default function ProfilePage() {
         },
         () => {
           storage
-            .ref(`images/${image.name}`)
+            .ref(`images/${userImage.name}`)
             //.child(image.name)
             .getDownloadURL()
             .then((url) => {
+              console.log(url);
               setUrl(url);
             });
         }
@@ -61,45 +74,75 @@ export default function ProfilePage() {
   };
 
   // Form submission function
-  const handleClick = (event) => {
+  const handleProfileUpload = async (event) => {
     console.log(`user data successfully added to db under ${authUser.uid}`);
-    event.preventDefault();
-    /*  // image upload to firebase/storage
-    const uploadTask = storage.ref(`images/${image.name}`).put(image);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {},
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        storage
-          .ref(`images/${image.name}`)
-          //.child(image.name)
-          .getDownloadURL()
-          .then((url) => {
-            setUrl(url);
-          });
-      }
-    ); */
+    /*  event.preventDefault(); */
 
     fire.firestore().collection("users").doc(authUser.uid).set({
       userName: userName,
-      language: lang,
+      language: language,
       location: location,
       country: countryOrg,
       url: url,
       hobbies: hobbies,
+      image: image.name,
     });
     popUp();
-    router.push("/mainBoard") 
+    router.push("/mainBoard");
   };
 
   const selectedTags = (tags) => {
-    setHobbies(tags);
+    console.log(tags)
+    console.log(user)
+    let updatedUser = user
+    updatedUser.hobbies = [...tags]
+    
+    setUser(updatedUser);
   };
 
+  useEffect(() => {
+    if (authUser) {
+      try {
+        db.collection("users")
+          .doc(authUser.uid)
+          .get()
+          .then((snapshot) => {
+            const user = snapshot.data();
+            console.log(user);
+            setUser(user);
+            setUserName(user.userName);
+            setLang(user.language);
+            setLocation(user.location);
+            setCountryOrg(user.country);
+            setHobbies(user.hobbies);
+            setUrl(user.url);
+            setImage(user.image);
+          });
+      } catch (e) {
+        console.error(e);
+      }
+      /* console.log(user); */
+      /*  const dbRef = fire.database().ref()
+      dbRef.child('users').child(authUser.uid).get().then((snapshot) => {
+        if (snapshot.exists()) {
+          console.log(snapshot.val());
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+        console.error(error);
+      }); */
+      /* db.collection("users").onSnapshot((snap) => {
+        const collection = snap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        console.log(collection);
+      }); */
+    }
+  }, [authUser]);
+ console.log(user)
+  console.log("profile rendered");
   return (
     <div>
       <fieldset>
@@ -112,10 +155,13 @@ export default function ProfilePage() {
             onChange={handleImageChange}
           />
 
-          <img
+          <Image
             src={url || "http://via.placeholder.com/400x300"}
-            height="300"
-            width="400"
+            placeholder="blur"
+            blurDataURL="http://via.placeholder.com/400x300"
+            alt="avatar"
+            width={400}
+            height={300}
           />
 
           <button onClick={removeSelectedImage}>Remove This Image</button>
@@ -134,7 +180,7 @@ export default function ProfilePage() {
         <div>
           <label>Language:</label>&nbsp;
           <select
-            value={lang}
+            value={language}
             onChange={(target) => setLang(target.target.value)}
           >
             {Languages.map((language, index) => (
@@ -161,9 +207,9 @@ export default function ProfilePage() {
           />
         </div>
         <br />
-        <TagsInput selectedTags={selectedTags} />
+        <TagsInput selectedTags={selectedTags} hobbies={hobbies} />
         <br />
-        <button type="submit" onClick={handleClick}>
+        <button type="submit" onClick={handleProfileUpload}>
           Save
         </button>
         &nbsp;

@@ -21,7 +21,7 @@ const TagsInput = ({ selectedTags, hobbies }) => {
     setTags([...tags.filter((tag) => tags.indexOf(tag) !== index)]);
     selectedTags([...tags.filter((tag) => tags.indexOf(tag) !== index)]);
   };
-  console.log("tags rendered");
+
   return (
     <div>
       <ul>

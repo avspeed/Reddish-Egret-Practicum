@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import { useRouter } from "next/router";
 import fire from "../config/fire-config";
 
 const formatAuthUser = (user) => ({
@@ -10,6 +10,8 @@ const formatAuthUser = (user) => ({
 export default function useFirebaseAuth() {
   const [authUser, setAuthUser] = useState(null); //null means that user hasn't logged in
   const [loading, setLoading] = useState(true); //true means the FB fetching the data
+
+  const router = useRouter()
 
   const authStateChanged = async (authState) => {
    //check if the user not logged in
@@ -38,6 +40,7 @@ export default function useFirebaseAuth() {
 
   const signOut = () => {
     fire.auth().signOut().then(clear());
+    router.push('/')
   };
 
   // listen for Firebase state change

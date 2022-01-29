@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-
+import toast, { Toaster } from "react-hot-toast";
 import { useAuth } from "../../components/context/authUserContext";
 
 const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [notify, setNotification] = useState(null);
 
   const { signInWithEmailAndPassword } = useAuth();
 
@@ -15,37 +14,38 @@ const Login = () => {
     e.preventDefault();
 
     signInWithEmailAndPassword(email, password)
-      .then((authUser) => {
+      .then(() => {
         router.push("/mainBoard");
       })
       .catch((err) => {
         console.log(err.code, err.message);
-        setNotification(err.message);
-        setTimeout(() => {
-          setNotification("");
-        }, 2000);
+        toast.error(err.message);
       });
   };
 
   return (
     <div>
       <h1>Login Here</h1>
-      {notify}
+      <Toaster />
       <form onSubmit={handleLogin}>
-        <label>Email</label>
+        <label htmlFor="email">Email</label>
         <input
           type="text"
+          id="email"
           value={email}
           onChange={({ target }) => setEmail(target.value)}
           placeholder="Email"
+          required
         />
         <br />
-        <label>Password</label>
+        <label htmlFor="password">Password</label>
         <input
           type="password"
+          id="password"
           value={password}
           onChange={({ target }) => setPassword(target.value)}
           placeholder="Password"
+          required
         />
         <br />
         <button type="submit">Login</button>

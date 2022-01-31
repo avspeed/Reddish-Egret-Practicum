@@ -26,13 +26,14 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const Post = (props) => {
-  const { post } = props;
+const Post = ({post}) => {
+  
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  console.log(post)
   return (
     <Grid item xs={12} md={6}>
       <Card>

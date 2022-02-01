@@ -34,8 +34,10 @@ const Post = ({post}) => {
     setExpanded(!expanded);
   };
   console.log(post)
+  const dateCreatedAt = new Date(post.createdAt.seconds)
+  console.log(dateCreatedAt)
   return (
-    <Grid item xs={12} md={6}>
+    <Grid item xs={12} md={6} sx={{margin: "10px 0px"}}>
       <Card>
         <Box sx={{ display: "flex" }}>
           {/* <Avatar sx={{ height: "80px", width: "80px" }}> */}
@@ -48,15 +50,13 @@ const Post = ({post}) => {
          {/*  </Avatar> */}
           <CardContent sx={{display: "block" }}>
             <Typography component="h2" variant="h5">
-              {"user.name"}
+              {post.userName}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              {"post.date"}
+              {"post.createdAt"}
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ overflow: "true" }} >
-              {
-                "post.body. bodypost.bodypost.bodypost.body"
-              }
+              {post.postBody}
             </Typography>
           </CardContent>
         </Box>

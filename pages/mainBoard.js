@@ -25,7 +25,7 @@ const MainBoard = () => {
           posts.push(doc.data());
         });
         setPosts(posts);
-        console.log("doc", docs.docs);
+        // console.log("doc", docs.docs);
       });
     }
   }, [authUser]);
@@ -35,6 +35,7 @@ console.log("all posts", posts)
     <>
       <div>You are logged in</div>
       <div>This is a main board where you see all posts</div>
+      <div style={{position: "absolute", rigth: 0}}>Profile screenshot</div>
       {posts.map((post, ind) => (
         <Post key={ind} post={post}/>
       ))}

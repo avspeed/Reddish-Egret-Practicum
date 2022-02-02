@@ -4,6 +4,9 @@ import { useRouter } from "next/router";
 import { useAuth } from "../components/context/authUserContext";
 import Post from "../components/Post";
 
+var s = new Date(1504095567183).toLocaleDateString("en-US")
+
+
 const MainBoard = () => {
   const [posts, setPosts] = useState([]);
 
@@ -22,7 +25,7 @@ const MainBoard = () => {
       db.collection("posts").onSnapshot((docs) => {
         let posts = [];
         docs.forEach((doc) => {
-          posts.push(doc.data());
+          posts.push({...doc.data(), postId: doc.id});
         });
         setPosts(posts);
         // console.log("doc", docs.docs);
@@ -30,14 +33,13 @@ const MainBoard = () => {
     }
   }, [authUser]);
 console.log("all posts", posts)
-  console.log("mainboard rendered");
+
   return (
     <>
-      <div>You are logged in</div>
-      <div>This is a main board where you see all posts</div>
-      <div style={{position: "absolute", rigth: 0}}>Profile screenshot</div>
-      {posts.map((post, ind) => (
-        <Post key={ind} post={post}/>
+      
+      <div style={{position: "absolute", left: '80%'}}>Profile screenshot</div>
+      {posts.map((post) => (
+        <Post key={post.postId} post={post}/>
       ))}
     </>
   );

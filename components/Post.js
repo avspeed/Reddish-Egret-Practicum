@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -14,56 +14,72 @@ import { styled } from "@mui/material/styles";
 import Collapse from "@mui/material/Collapse";
 import CardActions from "@mui/material/CardActions";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import Badge from "@mui/material/Badge";
+import CommentIcon from "@mui/icons-material/Comment";
+import Comment from "./Comment";
+import AddNeWComment from "./AddNewComment";
+import { red } from "@mui/material/colors";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  transform: !expand ? "rotate(0deg)" : "rotate(360deg)",
   marginLeft: "auto",
   transition: theme.transitions.create("transform", {
     duration: theme.transitions.duration.shortest,
   }),
 }));
 
-const Post = ({post}) => {
-  
-  const [expanded, setExpanded] = React.useState(false);
+const Post = ({ post }) => {
+  const [expanded, setExpanded] = useState(false);
+  const [favorite, setFavorite] = useState(false);
 
+  const favoriteClick = (postID) => {
+    const fav = !favorite
+    setFavorite(fav)
+  };
+  
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  console.log(post)
-  const dateCreatedAt = new Date(post.createdAt.seconds)
-  console.log(dateCreatedAt)
+
+  const dateCreatedAt = new Date(post.createdAt);
+console.log(post)
   return (
-    <Grid item xs={12} md={6} sx={{margin: "10px 0px"}}>
+    <Grid item xs={12} md={6} sx={{ margin: "10px 0px" }}>
       <Card>
         <Box sx={{ display: "flex" }}>
-          {/* <Avatar sx={{ height: "80px", width: "80px" }}> */}
-            <CardMedia
-              component="img"
-              sx={{ width: 120, height: 120, display: { xs: "none", sm: "block" } }}
-              image="../images/treeroots.jpg"
-              alt={"post.imageLabel"}
-            />
-         {/*  </Avatar> */}
-          <CardContent sx={{display: "block" }}>
+          <CardMedia
+            component="img"
+            sx={{
+              width: 120,
+              height: 120,
+              display: { xs: "none", sm: "block" },
+            }}
+            image={post.userImage}
+            alt={"post.imageLabel"}
+          />
+
+          <CardContent sx={{ display: "block" }}>
             <Typography component="h2" variant="h5">
               {post.userName}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              {"post.createdAt"}
+              {new Date(post.createdAt.toDate()).toDateString()}
             </Typography>
-            <Typography variant="subtitle1" paragraph sx={{ overflow: "true" }} >
+            <Typography variant="subtitle1" paragraph sx={{ overflow: "true" }}>
               {post.postBody}
             </Typography>
           </CardContent>
         </Box>
         <CardActions disableSpacing>
           <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
+            <Badge badgeContent={post.likeCount} color="primary">
+              <FavoriteIcon onClick={() =>favoriteClick(post.postId)} sx={{color: favorite ? '#FF3333' : null }}/>
+            </Badge>
           </IconButton>
+
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}
@@ -71,16 +87,16 @@ const Post = ({post}) => {
             aria-label="show more"
           >
             <ExpandMoreIcon />
+            <Badge badgeContent={post.commentCount} color="primary">
+              <CommentIcon />
+            </Badge>
           </ExpandMore>
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>comments in here</Typography>
-            <Typography paragraph>
-              Heat 1/2 cup of the broth in a pot until simmering, add saffron
-              and set aside for 10 minutes.
-            </Typography>
+            <Comment />
           </CardContent>
+          <AddNeWComment />
         </Collapse>
       </Card>
     </Grid>

@@ -11,6 +11,7 @@ import TagsInput from "../components/TagsHobbies";
 import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
 
+
 // Popup function to redirect after updating profile
 const popUp = () => {
   toast.success("Updated Successfully!");
@@ -18,6 +19,7 @@ const popUp = () => {
 
 export default function ProfilePage() {
   const { authUser } = useAuth();
+  console.log(authUser);
   const router = useRouter();
 
   const [user, setUser] = useState({
@@ -30,17 +32,18 @@ export default function ProfilePage() {
     url: "",
   });
 
+
   //To choose the image file
   const handleImageChange = async (e) => {
     if (e.target.files[0]) {
       const userImage = e.target.files[0];
-      setUser({ ...user, image: userImage.name });
+      console.log(userImage)
 
       const uploadTask = storage.ref(`images/${userImage.name}`).put(userImage);
 
       uploadTask.on(
         "state_changed",
-        (snapshot) => {},
+        (snapshot) => { },
         (error) => {
           console.log(error);
         },
@@ -49,12 +52,15 @@ export default function ProfilePage() {
             .ref(`images/${userImage.name}`)
             .getDownloadURL()
             .then((url) => {
-              setUser({ ...user, url: url });
+              console.log(user)
+              setUser({ ...user, image: userImage.name, url: url });
             });
         }
       );
     }
+
   };
+  console.log(user);
   // To delete the selected image file
   const removeSelectedImage = () => {
     setUser({ ...user, image: "" });

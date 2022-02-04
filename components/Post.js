@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import Comment from "./Comment";
+import AddNeWComment from "./AddNewComment";
 import PropTypes from "prop-types";
+
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -16,36 +19,61 @@ import CardActions from "@mui/material/CardActions";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Badge from "@mui/material/Badge";
 import CommentIcon from "@mui/icons-material/Comment";
-import Comment from "./Comment";
-import AddNeWComment from "./AddNewComment";
-import { red } from "@mui/material/colors";
+import { getDomainLocale } from "next/dist/shared/lib/router/router";
+
+import { db } from "../config/fire-config";
+import firebase from "firebase";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(360deg)",
+  /*   transform: !expand ? "rotate(0deg)" : "rotate(360deg)", */
   marginLeft: "auto",
   transition: theme.transitions.create("transform", {
     duration: theme.transitions.duration.shortest,
   }),
 }));
 
+function commentsLabel(count) {
+  if (count === 0) {
+    return "no comments";
+  }
+  if (count > 99) {
+    return "more than 99 comments";
+  }
+  return `${count} comments`;
+}
+
 const Post = ({ post }) => {
   const [expanded, setExpanded] = useState(false);
-  const [favorite, setFavorite] = useState(false);
+  const [favorite, setFavorite] = useState(post.liked);
 
-  const favoriteClick = (postID) => {
-    const fav = !favorite
-    setFavorite(fav)
+  const favoriteClick = async (postId) => {
+    const fav = !favorite;
+    setFavorite(fav);
+    /*   console.log(postId) */
+   /*  likePost(postId) */
+
+    const postRef = db.collection("posts").doc(postId);
+    if (favorite) {
+      postRef.update({
+        likeCount: firebase.firestore.FieldValue.increment(-1),
+      });
+    } else {
+      postRef.update({
+        likeCount: firebase.firestore.FieldValue.increment(1),
+      });
+    }
   };
-  
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  const dateCreatedAt = new Date(post.createdAt);
-console.log(post)
+  const dateCreatedAt = new Date(post.createdAt.toDate());
+/* console.log(post) */
+console.log(favorite)
   return (
     <Grid item xs={12} md={6} sx={{ margin: "10px 0px" }}>
       <Card>
@@ -65,8 +93,9 @@ console.log(post)
             <Typography component="h2" variant="h5">
               {post.userName}
             </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-              {new Date(post.createdAt.toDate()).toDateString()}
+            <Typography variant="subtitle2" color="text.secondary">
+              {/* {new Date(post.createdAt.toDate()).toDateString()} */}
+              Posted at {dateCreatedAt.toLocaleString()}
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ overflow: "true" }}>
               {post.postBody}
@@ -74,9 +103,17 @@ console.log(post)
           </CardContent>
         </Box>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <Badge badgeContent={post.likeCount} color="primary">
-              <FavoriteIcon onClick={() =>favoriteClick(post.postId)} sx={{color: favorite ? '#FF3333' : null }}/>
+          <IconButton
+            aria-label="add to favorites"
+            onClick={() => favoriteClick(post.postId)}
+          >
+            <Badge
+              badgeContent={post.likeCount}
+              sx={{ fontSize: "9" }}
+              color="primary"
+              showZero
+            >
+              <FavoriteIcon sx={{ color: favorite ? "#FF3333" : null }} />
             </Badge>
           </IconButton>
 
@@ -87,8 +124,8 @@ console.log(post)
             aria-label="show more"
           >
             <ExpandMoreIcon />
-            <Badge badgeContent={post.commentCount} color="primary">
-              <CommentIcon />
+            <Badge badgeContent={post.commentCount} color="primary" showZero>
+              <CommentIcon aria-label={commentsLabel(post.commentCount)} />
             </Badge>
           </ExpandMore>
         </CardActions>

@@ -3,6 +3,8 @@ import { storage, db } from "../config/fire-config";
 import { useRouter } from "next/router";
 import { useAuth } from "../components/context/authUserContext";
 import Post from "../components/Post"
+import ProfileCard from "../components/ProfileCard";
+
 
 const MainBoard = () => {
   const { authUser, loading } = useAuth();
@@ -32,6 +34,7 @@ console.log('mainboard rendered')
       <div>You are logged in</div>
       <div>This is a main board where you see all posts</div>
       <Post />
+      <ProfileCard/>
     </>
   );
 };

@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { storage, db } from "../config/fire-config";
 import { useRouter } from "next/router";
 import { useAuth } from "../components/context/authUserContext";
-import Post from "../components/Post";
 
-var s = new Date(1504095567183).toLocaleDateString("en-US");
+import Post from "../components/Post";
+import ProfileCard from "../components/ProfileCard";
+
+
 
 const MainBoard = () => {
   const [posts, setPosts] = useState([]);
@@ -76,12 +78,16 @@ const MainBoard = () => {
 
   return (
     <>
+
       <div style={{ position: "absolute", left: "80%" }}>
         Profile screenshot
       </div>
       {posts.map((post) => (
         <Post key={post.postId} post={post} />
       ))}
+
+      <ProfileCard/>
+
     </>
   );
 };

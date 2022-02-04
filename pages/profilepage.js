@@ -37,8 +37,7 @@ export default function ProfilePage() {
   const handleImageChange = async (e) => {
     if (e.target.files[0]) {
       const userImage = e.target.files[0];
-      console.log(userImage)
-
+     
       const uploadTask = storage.ref(`images/${userImage.name}`).put(userImage);
 
       uploadTask.on(
@@ -52,7 +51,6 @@ export default function ProfilePage() {
             .ref(`images/${userImage.name}`)
             .getDownloadURL()
             .then((url) => {
-              console.log(user)
               setUser({ ...user, image: userImage.name, url: url });
             });
         }

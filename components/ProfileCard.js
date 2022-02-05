@@ -46,7 +46,7 @@ function ProfileCard() {
   }, [authUser]);
 
   return (
-    <Card sx={{ maxWidth: 375, position: 'absolute', right: 0 }} >
+    <Card sx={{ maxWidth: 375, position: 'absolute', right: '20px' }} >
       <CustomizedDialogs >
         <ProfilePage />
       </CustomizedDialogs>

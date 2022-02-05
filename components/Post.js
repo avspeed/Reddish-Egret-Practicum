@@ -6,11 +6,9 @@ import PropTypes from "prop-types";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
 import { Box } from "@mui/system";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import { autocompleteClasses, Avatar } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
@@ -19,7 +17,6 @@ import CardActions from "@mui/material/CardActions";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Badge from "@mui/material/Badge";
 import CommentIcon from "@mui/icons-material/Comment";
-import { getDomainLocale } from "next/dist/shared/lib/router/router";
 
 import { db } from "../config/fire-config";
 import firebase from "firebase";
@@ -45,22 +42,43 @@ function commentsLabel(count) {
   return `${count} comments`;
 }
 
-const Post = ({ post }) => {
+const Post = ({ post, authUser }) => {
   const [expanded, setExpanded] = useState(false);
   const [favorite, setFavorite] = useState(post.liked);
 
   const favoriteClick = async (postId) => {
+    console.log(postId);
     const fav = !favorite;
     setFavorite(fav);
-    /*   console.log(postId) */
-   /*  likePost(postId) */
 
     const postRef = db.collection("posts").doc(postId);
     if (favorite) {
+      //if the post already liked by current users
+      //find document in the db to get it id
+      db.collection("likes")
+        .where("postId", "==", postId)
+        .get()
+        .then((snap) => {
+          const tobeDeleted = snap.docs[0].id;
+          //delete this doc from 'likes' collection
+          db.collection("likes")
+            .doc(tobeDeleted)
+            .delete()
+            .then()
+            .catch((error) => console.log(error));
+        })
+        .catch((error) => console.log(error));
+      //update likeCount field for the post document
       postRef.update({
         likeCount: firebase.firestore.FieldValue.increment(-1),
       });
     } else {
+      //write to database collections "likes"
+      db.collection("likes").add({
+        postId: postId,
+        userId: authUser.uid,
+      });
+      //update likeCount field for the post document
       postRef.update({
         likeCount: firebase.firestore.FieldValue.increment(1),
       });
@@ -72,8 +90,7 @@ const Post = ({ post }) => {
   };
 
   const dateCreatedAt = new Date(post.createdAt.toDate());
-/* console.log(post) */
-console.log(favorite)
+
   return (
     <Grid item xs={12} md={6} sx={{ margin: "10px 0px" }}>
       <Card>

@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import Link from "next/link";
 import { useAuth } from "../components/context/authUserContext";
 import Description from "../components/mainPage/Description";
@@ -6,7 +7,8 @@ const Home = () => {
   console.log(useAuth());
   return (
     <>
-      <Description />
+   
+    <Description />
 
       <Link href={"/mainPageSections/jobs"} passHref>
         <h3>Jobs and Career</h3>

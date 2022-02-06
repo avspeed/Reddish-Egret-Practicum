@@ -1,143 +1,139 @@
-import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';;
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import { Button, Link} from '@mui/material';
-import { useAuth } from "../context/authUserContext"
-import { ClassNames } from '@emotion/react';
-const  Header = ()=> {
-  const { authUser, loading, signOut } = useAuth();
+import React from "react";
+import fire from "../../config/fire-config";
+import { useAuth } from "../context/authUserContext";
+import { AppBar, Avatar, Box, Button,  IconButton, Menu, Toolbar } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
+
+const style = {
+  display: { xs: "block", sm: "none" }
+};
+
+const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleProfileMenuOpen = (event) => {
+  const { authUser, loading, signOut } = useAuth();
+  const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleMenuClose = () => {
+  const handleClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
   };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
-    <Menu
-    className = {ClassNames.humbergermenu}
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Home</MenuItem>
-    </Menu>
-  );
-
-  const mobileMenuId = 'primary-search-account-menu-mobile';
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem style = {{backgroundColor: "yellow"}}>
-        
-        <Typography>
-         Home
-        </Typography>
-      </MenuItem>
-      <MenuItem>
-       
-        <p>logout</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen} >
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
-
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style = {{backgroundColor: "grey"}}>
-        <Toolbar>
-        <Typography variant = "h4">
-         U Welcome
-        </Typography>
 
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex', } } } style = {{margin:10,  }} >
-          <Link href={"/"}><Button style = {{backgroundColor: "white", margin: 10  }}>Home</Button> </Link>
-          <Link href={"/users/login"}><Button style = {{backgroundColor: "white" , margin: 10 }}>Login</Button> </Link>
-          <Link href={"/users/join"}><Button style = {{backgroundColor: "white", margin: 10   }}>Logout</Button> </Link>
-  
-          </Box>
-          <Box position =  "static" sx={{ display: { xs: 'flex', md: 'none' } }}>
+
+      <AppBar position="static" sx={{ backgroundColor: "#212121" }}>
+        <Toolbar>
+          <Avatar
+            alt="Remy Sharp"
+            src="../images/UTab-logos_white.png"
+            sx={{ width: 80, height: 80, marginRight: "auto" }}
+
+          />
+          <div >
+
             <IconButton
               size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
+              edge="start"
               color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+              onClick={handleMenu}
             >
-              <MoreIcon />
+              <MenuIcon sx={{
+                ...style, '&:hover': {
+                  color: 'black', backgroundColor: 'white',
+                }
+              }} />
             </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              {!loading && authUser ? (
+                <div >
+                  <Button color="inherit" sx={{
+                    '&:hover': {
+                      color: 'black', backgroundColor: 'white',
+                    }, color: 'white', backgroundColor: "black", m: 2
+                  }} href={"/"}> Home </Button>
+                  <Button color="inherit" sx={{
+                    '&:hover': {
+                      color: 'black', backgroundColor: 'white',
+                    }, color: 'white', backgroundColor: "black", m: 2
+                  }} onClick={signOut}> Sign out </Button>
+                </div>
+              ) : (
+                <Box>
+                  <Button sx={{
+                    '&:hover': {
+                      color: 'black', backgroundColor: 'white',
+                    }, color: 'white', backgroundColor: "black", m: 2
+                  }} href={"/"}> Home </Button>
+                  <Button color="inherit" sx={{
+                    '&:hover': {
+                      color: 'black', backgroundColor: 'white',
+                    }, color: 'white', backgroundColor: "black", m: 2
+                  }} href={"/users/login"}> Login </Button>
+                  <Button color="inherit" sx={{
+                    '&:hover': {
+                      color: 'black', backgroundColor: 'white',
+                    }, color: 'white', backgroundColor: "black", m: 2
+                  }} href={"/users/join"}> JoinUs </Button>
+
+                </Box>
+              )}
+            </Menu>
+          </div>
+          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+            {!loading && authUser ? (
+              <div >
+                <Button color="inherit" sx={{ backgroundColor: "black", m: 2 }} href={"/"}> Home </Button>
+                <Button color="inherit" sx={{ backgroundColor: "black", m: 2 }} onClick={signOut}> Sign out </Button>
+              </div>
+            ) : (
+              <Box>
+                <Button color="inherit" sx={{
+                  '&:hover': {
+                    color: 'black', backgroundColor: 'white',
+                  }, backgroundColor: "black", m: 2
+                }} href={"/"}> Home </Button>
+
+                <Button color="inherit" sx={{
+                  '&:hover': {
+                    color: 'black', backgroundColor: 'white',
+                  }, backgroundColor: "black", m: 2
+                }} href={"/users/login"}> Login </Button>
+                <Button color="inherit" sx={{
+                  '&:hover': {
+                    color: 'black', backgroundColor: 'white',
+                  }, backgroundColor: "black", m: 2
+                }} href={"/users/join"}> JoinUs </Button>
+
+              </Box>
+            )}
           </Box>
+
+
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
     </Box>
   );
-}
+};
+
 export default Header;
 
- 
+
+
+

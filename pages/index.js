@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { useAuth } from "../components/context/authUserContext";
 import Description from "../components/mainPage/Description";
-
+import Cardmedia from "../components/Cards/Cardmedia";
 const Home = () => {
   console.log(useAuth());
   return (
     <>
       <Description />
-
+<Cardmedia />
       <Link href={"/mainPageSections/jobs"} passHref>
         <h3>Jobs and Career</h3>
       </Link>

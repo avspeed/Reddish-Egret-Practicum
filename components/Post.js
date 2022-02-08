@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Comment from "./Comment";
 import AddNeWComment from "./AddNewComment";
 import PropTypes from "prop-types";
@@ -25,7 +25,7 @@ const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
-  /*   transform: !expand ? "rotate(0deg)" : "rotate(360deg)", */
+    transform: !expand ? "rotate(0deg)" : "rotate(360deg)",
   marginLeft: "auto",
   transition: theme.transitions.create("transform", {
     duration: theme.transitions.duration.shortest,
@@ -42,9 +42,36 @@ function commentsLabel(count) {
   return `${count} comments`;
 }
 
-const Post = ({ post, authUser }) => {
+async function fetchComments(postId) {
+  return new Promise((resolve) => {
+    /* db.collection("comments").onSnapshot((doc) => {
+      
+      let comments = [];
+      doc.forEach((doc) => {
+        console.log(doc)
+        comments.push(doc.data());
+      });
+
+      resolve(comments);
+    }); */
+    db.collection("comments")
+      .where("postId", "==", postId)
+      .get()
+      .then((querySnapshot) => {
+        let comments = [];
+        querySnapshot.forEach((doc) => {
+          comments.push(doc.data());
+        });
+        resolve(comments);
+      });
+  });
+}
+
+const Post = ({ post, userId, currentUser }) => {
   const [expanded, setExpanded] = useState(false);
   const [favorite, setFavorite] = useState(post.liked);
+
+  const [comments, setComments] = useState();
 
   const favoriteClick = async (postId) => {
     console.log(postId);
@@ -76,7 +103,7 @@ const Post = ({ post, authUser }) => {
       //write to database collections "likes"
       db.collection("likes").add({
         postId: postId,
-        userId: authUser.uid,
+        userId: userId,
       });
       //update likeCount field for the post document
       postRef.update({
@@ -85,14 +112,25 @@ const Post = ({ post, authUser }) => {
     }
   };
 
-  const handleExpandClick = () => {
+  const handleExpandClick = (postId) => {
     setExpanded(!expanded);
+    if (!expanded) {
+      const unsibscribe = db.collection("comments").onSnapshot((docs) => {
+        const comments = new Promise((resolve) => {
+          resolve(fetchComments(postId));
+        });
+        comments.then((resp) => {
+          setComments(resp);
+        });
+      });
+    }
   };
 
   const dateCreatedAt = new Date(post.createdAt.toDate());
-
+  console.log("comments", comments);
+  console.log("post get rendered");
   return (
-    <Grid item xs={12} md={6} sx={{ margin: "10px 0px" }}>
+    <Grid item xs={6} md={6} sx={{ margin: "10px 0px" }} columns={1}>
       <Card>
         <Box sx={{ display: "flex" }}>
           <CardMedia
@@ -136,7 +174,7 @@ const Post = ({ post, authUser }) => {
 
           <ExpandMore
             expand={expanded}
-            onClick={handleExpandClick}
+            onClick={() => handleExpandClick(post.postId)}
             aria-expanded={expanded}
             aria-label="show more"
           >
@@ -148,9 +186,13 @@ const Post = ({ post, authUser }) => {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Comment />
+            {comments
+              ? comments.map((comment, ind) => (
+                  <Comment key={ind} comment={comment} />
+                ))
+              : null}
           </CardContent>
-          <AddNeWComment />
+          <AddNeWComment postId={post.postId} currentUser={currentUser} />
         </Collapse>
       </Card>
     </Grid>

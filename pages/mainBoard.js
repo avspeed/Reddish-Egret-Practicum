@@ -6,6 +6,8 @@ import { useAuth } from "../components/context/authUserContext";
 import Post from "../components/Post";
 import ProfileCard from "../components/ProfileCard";
 
+import Grid from "@mui/material/Grid";
+
 function postsCollection() {
   return new Promise((resolve) => {
     db.collection("posts").onSnapshot((docs) => {
@@ -46,6 +48,15 @@ async function checkForLikedPosts(userUid) {
 
 const MainBoard = () => {
   const [posts, setPosts] = useState([]);
+  const [currentUser, setCurrentUser] = useState({
+    userName: "",
+    country: "",
+    hobbies: [],
+    image: "",
+    language: "",
+    location: "",
+    url: "",
+  });
 
   const { authUser, loading } = useAuth();
 
@@ -64,21 +75,35 @@ const MainBoard = () => {
           setPosts(response);
         });
       });
+      //find current user into collention "users"
+      db.collection("users")
+          .doc(authUser.uid)
+          .get()
+          .then((snapshot) => {
+            const user = snapshot.data();
+            if (user) {
+              setCurrentUser(user);
+            }
+          });
     }
   }, [authUser]);
-
- // console.log("all posts", posts);
+  console.log("user", currentUser);
+  // console.log("all posts", posts);
   return (
-    <>
-      <ProfileCard />
-
-      <div style={{ position: "absolute", left: "80%" }}>
-        Profile screenshot
-      </div>
-      {posts.map((post) => (
-        <Post key={post.postId} post={post} authUser={authUser} />
-      ))}
-    </>
+    <Grid
+      display="grid"
+      gridTemplateColumns="repeat(2, 1fr)"
+      container
+      sx={{ padding: "5px" }}
+      columns={2}
+    >
+      <ProfileCard currentUser={currentUser} />
+      <Grid gridRow={1}>
+        {posts.map((post) => (
+          <Post key={post.postId} post={post} userId={authUser.uid} currentUser={currentUser} />
+        ))}
+      </Grid>
+    </Grid>
   );
 };
 

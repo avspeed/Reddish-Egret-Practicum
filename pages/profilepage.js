@@ -58,7 +58,7 @@ export default function ProfilePage() {
     }
 
   };
-  console.log(user);
+ 
   // To delete the selected image file
   const removeSelectedImage = () => {
     setUser({ ...user, image: "" });
@@ -105,7 +105,7 @@ export default function ProfilePage() {
       }
     }
   }, [authUser]);
-
+  console.log(user);
   return (
     <div>
       <div>

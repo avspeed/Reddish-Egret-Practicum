@@ -2,6 +2,7 @@ import { Grid } from "@mui/material";
 import Link from "next/link";
 import { useAuth } from "../components/context/authUserContext";
 import Description from "../components/mainPage/Description";
+import SearchBar from "../components/SearchBar";
 
 const Home = () => {
   console.log(useAuth());
@@ -9,6 +10,7 @@ const Home = () => {
     <>
    
     <Description />
+    <SearchBar/>
 
       <Link href={"/mainPageSections/jobs"} passHref>
         <h3>Jobs and Career</h3>

@@ -123,6 +123,7 @@ const Post = ({ post, userId, currentUser }) => {
           setComments(resp);
         });
       });
+      
     }
   };
 

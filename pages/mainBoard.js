@@ -97,7 +97,7 @@ const MainBoard = () => {
       sx={{ padding: "5px" }}
       columns={2}
     >
-      <ProfileCard />
+      <ProfileCard currentUser={currentUser} />
       <Grid gridRow={1}>
         {posts.map((post) => (
           <Post key={post.postId} post={post} userId={authUser.uid} currentUser={currentUser} />

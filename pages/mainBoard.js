@@ -66,6 +66,9 @@ const MainBoard = () => {
   /*  useEffect(() => {
     if (!loading && authUser) router.push("/");
   }, [authUser, loading, router]); */
+  const updateUserInfo = (user) => {
+    setCurrentUser(user)
+  };
 
   useEffect(() => {
     if (authUser) {
@@ -77,18 +80,17 @@ const MainBoard = () => {
       });
       //find current user into collention "users"
       db.collection("users")
-          .doc(authUser.uid)
-          .get()
-          .then((snapshot) => {
-            const user = snapshot.data();
-            if (user) {
-              setCurrentUser(user);
-            }
-          });
+        .doc(authUser.uid)
+        .get()
+        .then((snapshot) => {
+          const user = snapshot.data();
+          if (user) {
+            setCurrentUser(user);
+          }
+        });
     }
   }, [authUser]);
-  console.log("user", currentUser);
-  // console.log("all posts", posts);
+
   return (
     <Grid
       display="grid"
@@ -97,10 +99,15 @@ const MainBoard = () => {
       sx={{ padding: "5px" }}
       columns={2}
     >
-      <ProfileCard currentUser={currentUser} />
+      <ProfileCard currentUser={currentUser} updateUserInfo={updateUserInfo} />
       <Grid gridRow={1}>
         {posts.map((post) => (
-          <Post key={post.postId} post={post} userId={authUser.uid} currentUser={currentUser} />
+          <Post
+            key={post.postId}
+            post={post}
+            userId={authUser.uid}
+            currentUser={currentUser}
+          />
         ))}
       </Grid>
     </Grid>

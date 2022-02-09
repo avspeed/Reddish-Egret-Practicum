@@ -17,21 +17,11 @@ const popUp = () => {
   toast.success("Updated Successfully!");
 };
 
-export default function ProfilePage() {
+export default function ProfilePage({ currentUser, updateUserInfo }) {
   const { authUser } = useAuth();
-  console.log(authUser);
   const router = useRouter();
 
-  const [user, setUser] = useState({
-    userName: "",
-    country: "",
-    hobbies: [],
-    image: "",
-    language: "",
-    location: "",
-    url: "",
-  });
-
+  const [user, setUser] = useState(currentUser);
 
   //To choose the image file
   const handleImageChange = async (e) => {
@@ -66,8 +56,7 @@ export default function ProfilePage() {
   };
 
   // Form submission function
-  const handleProfileUpload = async (event) => {
-    console.log(`user data successfully added to db under ${authUser.uid}`);
+  const handleProfileUpload = async () => {
     //write data to firestore db
     fire.firestore().collection("users").doc(authUser.uid).set({
       userName: user.userName,
@@ -77,7 +66,9 @@ export default function ProfilePage() {
       url: user.url,
       hobbies: user.hobbies,
       image: user.image,
-    });
+    }).then(() => updateUserInfo(user));
+    
+    console.log(`user data successfully added to db under ${authUser.uid}`);
     popUp();
   };
 
@@ -105,12 +96,10 @@ export default function ProfilePage() {
       }
     }
   }, [authUser]);
-  console.log(user);
+
   return (
-    <div>
-      <div>
+    <>
         <Toaster />
-      </div>
       <fieldset>
         <div style={{ display: "block" }}>
           <input
@@ -190,6 +179,6 @@ export default function ProfilePage() {
         &nbsp;
         <button onClick={() => router.push("/mainBoard")}>Cancel</button>
       </fieldset>
-    </div>
+    </>
   );
 }

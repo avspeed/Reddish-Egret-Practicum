@@ -128,8 +128,7 @@ const Post = ({ post, userId, currentUser }) => {
   };
 
   const dateCreatedAt = new Date(post.createdAt.toDate());
-  console.log("comments", comments);
-  console.log("post get rendered");
+
   return (
     <Grid item xs={6} md={6} sx={{ margin: "10px 0px" }} columns={1}>
       <Card>

@@ -62,9 +62,9 @@ function updateDataInDb(docs, collection, dataToUpdate) {
   docs.forEach(async (doc) => {
     let docRef = db.collection(collection).doc(doc);
     try {
-      await docRef.update({
-        userImage: dataToUpdate,
-      });
+      await docRef.update(
+        dataToUpdate,
+      );
       console.log("Document successfully updated!");
     } catch (error) {
       // The document probably doesn't exist.
@@ -86,7 +86,7 @@ const MainBoard = () => {
   });
 
   const { authUser, loading } = useAuth();
-  const imageUrl = currentUser.url;
+
   /*  const router = useRouter(); */
 
   // Listen for changes on loading and authUser, redirect if needed
@@ -97,8 +97,12 @@ const MainBoard = () => {
   //callback function is being called when user updates profile
   //it updates currentUser state, and updated userImgUrl pass to each users post
   const updateUserInfo = (user) => {
+    const dataToSend = {
+      userImageUrl: user.userImageUrl,
+      userName: user.userName
+    }
     const userPosts = currentUserPosts(authUser.uid).then((data) => {
-      updateDataInDb(data, "posts", user.userImageUrl);
+      updateDataInDb(data, "posts", dataToSend);
     });
 
     setCurrentUser(user);

@@ -140,7 +140,7 @@ const Post = ({ post, userId, currentUser }) => {
               height: 120,
               display: { xs: "none", sm: "block" },
             }}
-            image={post.userImage}
+            image={post.userImageUrl || "https://via.placeholder.com/150/b3d1ff/808080?text=UTabAPP"}
             alt={"users avatar"}
           />
 

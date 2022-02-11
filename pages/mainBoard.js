@@ -34,6 +34,20 @@ function likesCollection(userUid) {
       });
   });
 }
+function userCommentsCollection(userUid) {
+  return new Promise((resolve) => {
+    db.collection("comments")
+      .where("author", "==", userUid)
+      .get()
+      .then((querySnapshot) => {
+        let usersComments = [];
+        querySnapshot.forEach((doc) => {
+          usersComments.push(doc.id);
+        });
+        resolve(usersComments);
+      });
+  });
+}
 async function checkForLikedPosts(userUid) {
   const posts = await postsCollection();
   const userLikes = await likesCollection(userUid);
@@ -95,7 +109,7 @@ const MainBoard = () => {
   }, [authUser, loading, router]); */
 
   //callback function is being called when user updates profile
-  //it updates currentUser state, and updated userImgUrl pass to each users post
+  //it updates currentUser state, and updated userImgUrl pass and userName to each users post or comment
   const updateUserInfo = (user) => {
     const dataToSend = {
       userImageUrl: user.userImageUrl,
@@ -104,13 +118,12 @@ const MainBoard = () => {
     const userPosts = currentUserPosts(authUser.uid).then((data) => {
       updateDataInDb(data, "posts", dataToSend);
     });
-
+    const userComments = userCommentsCollection(authUser.uid).then((data) => {
+      updateDataInDb(data, "comments", dataToSend)
+      console.log(data)
+    })
     setCurrentUser(user);
   };
-
-  if (authUser) {
-  }
-  console.log('main board', currentUser);
 
   useEffect(() => {
     if (authUser) {
@@ -133,7 +146,7 @@ const MainBoard = () => {
     }
   }, [authUser]);
 
-  console.log(posts);
+ /*  console.log(posts); */
   return (
     <Grid
       display="grid"

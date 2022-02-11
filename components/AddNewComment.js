@@ -5,25 +5,28 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import { db } from "../config/fire-config";
 import firebase from "firebase";
-
+import { useAuth } from "../components/context/authUserContext";
 
 
 export default function AddNeWComment({ postId, currentUser }) {
   const [comment, setComment] = useState("");
-  const { url, userName } = currentUser;
+  const { userImageUrl, userName } = currentUser;
+  const { authUser } = useAuth();
 
   //create reference to the post to be updated
   const postRef = db.collection("posts").doc(postId);
   
   const saveComment = (postId) => {
+    console.log("save comment")
     const time = new Date();
     try {
       db.collection("comments").doc().set({
+        author: authUser.uid,
         postId: postId,
-        author: userName,
+        userName: userName,
         commentBody: comment,
         createdAt: time,
-        userImageUrl: url,
+        userImageUrl: userImageUrl,
       });
     } catch (error) {
       console.log(error);
@@ -36,7 +39,6 @@ export default function AddNeWComment({ postId, currentUser }) {
     setComment("");
   };
 
-  console.log("add comment get rendered");
   return (
     <Stack>
       <TextField

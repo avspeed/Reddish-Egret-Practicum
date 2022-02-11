@@ -11,8 +11,9 @@ import { Avatar } from "@mui/material";
 
 
 export default function Comment({ comment }) {
-  const { author, commentBody, createdAt, userImageUrl } = comment;
+  const { userName, commentBody, createdAt, userImageUrl } = comment;
   const dateCreatedAt = new Date(createdAt.toDate());
+
   return (
     <Card sx={{margin: "5px"}}>
       <CardContent sx={{display: "flex", flexWrap: "wrap"}}>
@@ -25,9 +26,9 @@ export default function Comment({ comment }) {
           />
         </Avatar>
         <Typography gutterBottom variant="h5" component="div">
-          {author}
+          {userName}
         </Typography>
-        <Typography gutterBottom variant="subtitle2" component="span" sx={{alignSelf: "center"}}>
+        <Typography gutterBottom variant="subtitle2" component="span" sx={{alignSelf: "center", marginLeft: "5px"}}>
           posted ad {dateCreatedAt.toLocaleString()}
         </Typography>
 

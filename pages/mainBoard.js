@@ -7,6 +7,7 @@ import Post from "../components/Post";
 import ProfileCard from "../components/ProfileCard";
 
 import Grid from "@mui/material/Grid";
+import { Dvr } from "@mui/icons-material";
 
 function postsCollection() {
   return new Promise((resolve) => {
@@ -45,6 +46,32 @@ async function checkForLikedPosts(userUid) {
   });
   return posts;
 }
+async function currentUserPosts(userUid) {
+  const posts = await postsCollection();
+  console.log(posts);
+  const userPosts = [];
+  posts.forEach((post) => {
+    if (post.author === userUid) {
+      userPosts.push(post.postId);
+    }
+  });
+  console.log(userPosts);
+  return userPosts;
+}
+function updateDataInDb(docs, collection, dataToUpdate) {
+  docs.forEach(async (doc) => {
+    let docRef = db.collection(collection).doc(doc);
+    try {
+      await docRef.update({
+        userImage: dataToUpdate,
+      });
+      console.log("Document successfully updated!");
+    } catch (error) {
+      // The document probably doesn't exist.
+      console.error("Error updating document: ", error);
+    }
+  });
+}
 
 const MainBoard = () => {
   const [posts, setPosts] = useState([]);
@@ -55,20 +82,31 @@ const MainBoard = () => {
     image: "",
     language: "",
     location: "",
-    url: "",
+    userImageUrl: "",
   });
 
   const { authUser, loading } = useAuth();
-
+  const imageUrl = currentUser.url;
   /*  const router = useRouter(); */
 
   // Listen for changes on loading and authUser, redirect if needed
   /*  useEffect(() => {
     if (!loading && authUser) router.push("/");
   }, [authUser, loading, router]); */
+
+  //callback function is being called when user updates profile
+  //it updates currentUser state, and updated userImgUrl pass to each users post
   const updateUserInfo = (user) => {
-    setCurrentUser(user)
+    const userPosts = currentUserPosts(authUser.uid).then((data) => {
+      updateDataInDb(data, "posts", user.userImageUrl);
+    });
+
+    setCurrentUser(user);
   };
+
+  if (authUser) {
+  }
+  console.log('main board', currentUser);
 
   useEffect(() => {
     if (authUser) {
@@ -91,6 +129,7 @@ const MainBoard = () => {
     }
   }, [authUser]);
 
+  console.log(posts);
   return (
     <Grid
       display="grid"

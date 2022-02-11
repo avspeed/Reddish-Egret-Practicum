@@ -141,7 +141,7 @@ const Post = ({ post, userId, currentUser }) => {
               display: { xs: "none", sm: "block" },
             }}
             image={post.userImage}
-            alt={"post.imageLabel"}
+            alt={"users avatar"}
           />
 
           <CardContent sx={{ display: "block" }}>

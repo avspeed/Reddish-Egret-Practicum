@@ -55,7 +55,7 @@ export default function CustomizedDialogs({ children }) {
   const handleClose = () => {
     setOpen(false);
   };
-
+  
   return (
     <>
       <Button variant="outlined" onClick={handleClickOpen}>
@@ -72,7 +72,7 @@ export default function CustomizedDialogs({ children }) {
         >
           Account Settings
         </BootstrapDialogTitle>
-        <DialogContent dividers>{children}</DialogContent>
+        <DialogContent dividers >{children}</DialogContent>
       </BootstrapDialog>
     </>
   );

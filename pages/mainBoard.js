@@ -7,7 +7,7 @@ import Post from "../components/Post";
 import ProfileCard from "../components/ProfileCard";
 
 import Grid from "@mui/material/Grid";
-import { Dvr } from "@mui/icons-material";
+
 
 function postsCollection() {
   return new Promise((resolve) => {
@@ -62,23 +62,20 @@ async function checkForLikedPosts(userUid) {
 }
 async function currentUserPosts(userUid) {
   const posts = await postsCollection();
-  console.log(posts);
   const userPosts = [];
   posts.forEach((post) => {
     if (post.author === userUid) {
       userPosts.push(post.postId);
     }
   });
-  console.log(userPosts);
+
   return userPosts;
 }
 function updateDataInDb(docs, collection, dataToUpdate) {
   docs.forEach(async (doc) => {
     let docRef = db.collection(collection).doc(doc);
     try {
-      await docRef.update(
-        dataToUpdate,
-      );
+      await docRef.update(dataToUpdate);
       console.log("Document successfully updated!");
     } catch (error) {
       // The document probably doesn't exist.
@@ -111,17 +108,22 @@ const MainBoard = () => {
   //callback function is being called when user updates profile
   //it updates currentUser state, and updated userImgUrl pass and userName to each users post or comment
   const updateUserInfo = (user) => {
-    const dataToSend = {
-      userImageUrl: user.userImageUrl,
-      userName: user.userName
+    //check if userName of userImage Url have changed - in this case update data for comments and posts
+    if (
+      currentUser.userName !== user.userName ||
+      currentUser.userImageUrl !== user.userImageUrl
+    ) {
+      const dataToSend = {
+        userImageUrl: user.userImageUrl,
+        userName: user.userName,
+      };
+      const userPosts = currentUserPosts(authUser.uid).then((data) => {
+        updateDataInDb(data, "posts", dataToSend);
+      });
+      const userComments = userCommentsCollection(authUser.uid).then((data) => {
+        updateDataInDb(data, "comments", dataToSend);
+      });
     }
-    const userPosts = currentUserPosts(authUser.uid).then((data) => {
-      updateDataInDb(data, "posts", dataToSend);
-    });
-    const userComments = userCommentsCollection(authUser.uid).then((data) => {
-      updateDataInDb(data, "comments", dataToSend)
-      console.log(data)
-    })
     setCurrentUser(user);
   };
 
@@ -146,7 +148,7 @@ const MainBoard = () => {
     }
   }, [authUser]);
 
- /*  console.log(posts); */
+  /*  console.log(posts); */
   return (
     <Grid
       display="grid"

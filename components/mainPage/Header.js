@@ -1,6 +1,8 @@
 import React from "react";
 import fire from "../../config/fire-config";
-import { useAuth } from "../context/authUserContext";
+import { useAuth } from "../context/authUserContext"
+
+
 import {
   AppBar,
   Avatar,

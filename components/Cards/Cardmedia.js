@@ -1,14 +1,13 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Typography } from "@mui/material";
 import Link from "next/link";
-import Jobs from "../Jobs"
+
 
 const Cardmedia = () => {
  return (
-  <Container>
-   <Grid container spacing={7}>
-    <Grid item >
-    <Link  href={"/mainPageSections/jobs"} passHref>
-     <Card sx={{ maxWidth: 345 }}>
+  <Grid container spacing={3} sx={{ mt: 5, dispalay: "flex", alignItem: "center", justifyContent: "center" }}>
+   <Grid item xs={12} md={5} lg={3} sx={{ width: "auto", m: 2 }}>
+    <Link href={"/mainPageSections/jobs"} passHref>
+     <Card sx={{ maxWidth: "auto", justifyContent: "center" }}  >
       <CardMedia
        component="img"
        alt="green iguana"
@@ -17,7 +16,7 @@ const Cardmedia = () => {
       />
       <CardContent>
        <Typography gutterBottom variant="h4" component="div">
-       Jobs and Career
+        Jobs and Career
        </Typography>
        <Typography variant="body2" color="text.secondary">
         Lizards are a widespread group of squamate reptiles, with over 6,000
@@ -28,11 +27,11 @@ const Cardmedia = () => {
        <Button size="small">Learn More</Button>
       </CardActions>
      </Card>
-     </Link>
-    </Grid>
-    <Grid item >
+    </Link>
+   </Grid>
+   <Grid item xs={12} md={5} lg={3} sx={{ width: "auto", m: 2 }}>
     <Link href={"/mainPageSections/housingfood"} passHref>
-     <Card sx={{ maxWidth: 345 }}>
+     <Card sx={{ maxWidth: "auto", m: "auto" }}>
       <CardMedia
        component="img"
        alt="green iguana"
@@ -41,7 +40,7 @@ const Cardmedia = () => {
       />
       <CardContent>
        <Typography gutterBottom variant="h4" component="div">
-       Housing And Food
+        Housing And Food
        </Typography>
        <Typography variant="body2" color="text.secondary">
         Lizards are a widespread group of squamate reptiles, with over 6,000
@@ -52,11 +51,11 @@ const Cardmedia = () => {
        <Button size="small">Learn More</Button>
       </CardActions>
      </Card>
-     </Link>
-    </Grid>
-    <Grid item >
+    </Link>
+   </Grid>
+   <Grid item xs={12} md={5} lg={3} sx={{ width: "auto", m: 2 }}>
     <Link href={"/mainPageSections/educationlanguage"} passHref>
-     <Card sx={{ maxWidth: 345 }}>
+     <Card sx={{ maxWidth: "auto", m: "auto" }}>
       <CardMedia
        component="img"
        alt="green iguana"
@@ -65,7 +64,7 @@ const Cardmedia = () => {
       />
       <CardContent>
        <Typography gutterBottom variant="h5" component="div">
-       Education and Language
+        Education and Language
        </Typography>
        <Typography variant="body2" color="text.secondary">
         Lizards are a widespread group of squamate reptiles, with over 6,000
@@ -76,10 +75,10 @@ const Cardmedia = () => {
        <Button size="small">Learn More</Button>
       </CardActions>
      </Card>
-     </Link>
-    </Grid>
+    </Link>
    </Grid>
-  </Container>
+  </Grid>
+
 
  )
 }
@@ -103,14 +102,3 @@ export default Cardmedia;
 
 
 
-// <Link  href={"/mainPageSections/jobs"} passHref>
-// <h3>Jobs and Career</h3>
-// </Link>
-
-// <Link href={"/mainPageSections/housingfood"} passHref>
-// <h3>Housing And Food</h3>
-// </Link>
-
-// <Link href={"/mainPageSections/educationlanguage"} passHref>
-// <h3>Education and Language</h3>
-// </Link>

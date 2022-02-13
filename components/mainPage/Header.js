@@ -1,9 +1,8 @@
 import React from "react";
 import fire from "../../config/fire-config";
 import { useAuth } from "../context/authUserContext";
-import { AppBar, Avatar, Box, Button,  IconButton, Menu, Toolbar } from "@mui/material";
+import { AppBar, Avatar, Box, Button, IconButton, Menu, Toolbar } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-
 const style = {
   display: { xs: "block", sm: "none" }
 };
@@ -20,15 +19,12 @@ const Header = () => {
   };
   return (
     <Box sx={{ flexGrow: 1 }}>
-
-
       <AppBar position="static" sx={{ backgroundColor: "#212121" }}>
         <Toolbar>
           <Avatar
             alt="Remy Sharp"
             src="../images/UTab-logos_white.png"
             sx={{ width: 80, height: 80, marginRight: "auto" }}
-
           />
           <div >
 

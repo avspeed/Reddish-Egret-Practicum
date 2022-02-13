@@ -5,6 +5,7 @@ import { useAuth } from "../components/context/authUserContext";
 
 import Post from "../components/Post";
 import ProfileCard from "../components/ProfileCard";
+import CreatePost from "../components/addPost";
 
 function postsCollection() {
   return new Promise((resolve) => {
@@ -67,9 +68,10 @@ const MainBoard = () => {
     }
   }, [authUser]);
 
- // console.log("all posts", posts);
+  // console.log("all posts", posts);
   return (
     <>
+      <CreatePost />
       <ProfileCard />
 
       <div style={{ position: "absolute", left: "80%" }}>

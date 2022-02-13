@@ -15,7 +15,7 @@ export default function AddNeWComment() {
     console.log(comment);
     setComment('')
   };
-  
+
   return (
     <Stack>
       <TextField

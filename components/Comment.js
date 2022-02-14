@@ -21,7 +21,7 @@ export default function Comment({ comment }) {
           <CardMedia
             component="img"
             height="40"
-            image={userImageUrl}
+            image={userImageUrl || "https://via.placeholder.com/150/b3d1ff/808080?text=UTabAPP"}
             alt="avatar"
           />
         </Avatar>

@@ -5,6 +5,7 @@ import { useAuth } from "../components/context/authUserContext";
 
 import Post from "../components/Post";
 import ProfileCard from "../components/ProfileCard";
+import CreatePost from "../components/addPost";
 
 import Grid from "@mui/material/Grid";
 
@@ -148,7 +149,7 @@ const MainBoard = () => {
     }
   }, [authUser]);
 
-  /*  console.log(posts); */
+
   return (
     <Grid
       display="grid"
@@ -157,6 +158,7 @@ const MainBoard = () => {
       sx={{ padding: "5px" }}
       columns={2}
     >
+       <CreatePost />
       <ProfileCard currentUser={currentUser} updateUserInfo={updateUserInfo} />
       <Grid gridRow={1}>
         {posts.map((post) => (
@@ -169,6 +171,7 @@ const MainBoard = () => {
         ))}
       </Grid>
     </Grid>
+
   );
 };
 

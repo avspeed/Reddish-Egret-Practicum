@@ -13,6 +13,7 @@ export default function AddNeWComment({ postId, currentUser }) {
   const { userImageUrl, userName } = currentUser;
   const { authUser } = useAuth();
 
+
   //create reference to the post to be updated
   const postRef = db.collection("posts").doc(postId);
   
@@ -38,6 +39,7 @@ export default function AddNeWComment({ postId, currentUser }) {
     //reset the comment to empty string
     setComment("");
   };
+
 
   return (
     <Stack>

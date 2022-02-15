@@ -1,5 +1,5 @@
-
 import React, { useEffect, useState } from "react";
+import List from '@mui/material/List';
 import fire from "../config/fire-config";
 import { storage } from "../config/fire-config";
 import { CountryDropdown } from "react-country-region-selector";
@@ -8,62 +8,52 @@ import "@firebase/auth";
 import { useRouter } from "next/router";
 import { useAuth } from "./context/authUserContext";
 import TagsInput from "./TagsHobbies";
-import App from "next/app"
-import firebase from 'firebase';
-import { ListItem, unstable_composeClasses } from "@mui/material";
-import { Typography, Button, Card, CardActions, CardContent, CardMedia, CssBaeseline, Grid, Modal, } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import App from "next/app";
+import firebase from "firebase";
+import { ListItem, ListItemText, unstable_composeClasses } from "@mui/material";
+import {
+  Typography,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  CssBaeseline,
+  Grid,
+  Modal,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import CustomizedDialogs from "./dialog";
 import ProfilePage from "/pages//profilepage";
 
-function ProfileCard() {
+function ProfileCard({ currentUser, updateUserInfo }) {
   const { authUser } = useAuth();
-  const [open, setOpen] = useState(false);
-  const [user, setUser] = useState([{
-    id: "",
-    userName: "",
-    countryOrg: "",
-    hobbies: [],
-    language: "",
-    location: "",
-    url: "",
-
-  }]);
-
-  //to fetch the logged-in User details and render it on the page
-  useEffect(() => {
-    if (authUser) {
-      fire.firestore().collection("users")
-        .doc(authUser.uid)
-        .get()
-        .then((snapshot) => {
-          const currentuser = snapshot.data();
-          setUser(currentuser);
-
-        });
-
-    }
-  }, [authUser]);
-
+  const { country, hobbies, language, location, url, userName } = currentUser;
+  console.log(hobbies);
   return (
-    <Card sx={{ maxWidth: 375, position: 'absolute', right: '20px' }} >
-      <CustomizedDialogs >
-        <ProfilePage />
-      </CustomizedDialogs>
-      <CardMedia
-        component="img"
-        image={user.url}
-        alt="avatar"
-      />
-      <CardContent>
-        <Typography gutterBottom >
-          {user.userName}</Typography>
-        <Typography gutterBottom >{user.language}</Typography>
-        <Typography gutterBottom> {user.location}</Typography>
-        <Typography gutterBottom>{user.country}</Typography>
-        <Typography gutterBottom>{user.hobbies}</Typography>
-      </CardContent>
-    </Card>
+    <Grid item xs={2} columns={1} gridColumn="2" mx="auto" my="10px">
+      <Card sx={{ maxWidth: 375 }}>
+        <CustomizedDialogs>
+          <ProfilePage
+            currentUser={currentUser}
+            updateUserInfo={updateUserInfo}
+          />
+        </CustomizedDialogs>
+        <CardMedia component="img" image={url} alt="avatar" />
+        <CardContent sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+          <Typography gutterBottom><strong>{userName}</strong></Typography>
+          <Typography gutterBottom>Speaks <strong>{language}</strong></Typography>
+          <Typography gutterBottom>Located at <strong>{location}</strong></Typography>
+          <Typography gutterBottom>Originaly from <strong>{country}</strong></Typography>
+          <Typography variant="subtitle2" >Interested in: </Typography>
+          <List sx={{ display: "flex", fontStyle: "italic", paddingTop: "0px"}} >
+            {hobbies.map((hobby, index) => {
+              return <ListItemText sx={{margin: "4px"}} key={index}> {hobby} </ListItemText>;
+            })}
+          </List>
+        </CardContent>
+      </Card>
+    </Grid>
   );
 }
 

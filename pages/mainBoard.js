@@ -7,6 +7,8 @@ import Post from "../components/Post";
 import ProfileCard from "../components/ProfileCard";
 import CreatePost from "../components/addPost";
 
+import Grid from "@mui/material/Grid";
+
 function postsCollection() {
   return new Promise((resolve) => {
     db.collection("posts").onSnapshot((docs) => {
@@ -47,6 +49,15 @@ async function checkForLikedPosts(userUid) {
 
 const MainBoard = () => {
   const [posts, setPosts] = useState([]);
+  const [currentUser, setCurrentUser] = useState({
+    userName: "",
+    country: "",
+    hobbies: [],
+    image: "",
+    language: "",
+    location: "",
+    url: "",
+  });
 
   const { authUser, loading } = useAuth();
 
@@ -56,6 +67,9 @@ const MainBoard = () => {
   /*  useEffect(() => {
     if (!loading && authUser) router.push("/");
   }, [authUser, loading, router]); */
+  const updateUserInfo = (user) => {
+    setCurrentUser(user)
+  };
 
   useEffect(() => {
     if (authUser) {
@@ -65,22 +79,43 @@ const MainBoard = () => {
           setPosts(response);
         });
       });
+      //find current user into collention "users"
+      db.collection("users")
+        .doc(authUser.uid)
+        .get()
+        .then((snapshot) => {
+          const user = snapshot.data();
+          if (user) {
+            setCurrentUser(user);
+          }
+        });
     }
   }, [authUser]);
 
-  // console.log("all posts", posts);
-  return (
-    <>
-      <CreatePost />
-      <ProfileCard />
 
-      <div style={{ position: "absolute", left: "80%" }}>
-        Profile screenshot
-      </div>
-      {posts.map((post) => (
-        <Post key={post.postId} post={post} authUser={authUser} />
-      ))}
-    </>
+  
+  return (
+    <Grid
+      display="grid"
+      gridTemplateColumns="repeat(2, 1fr)"
+      container
+      sx={{ padding: "5px" }}
+      columns={2}
+    >
+       <CreatePost />
+      <ProfileCard currentUser={currentUser} updateUserInfo={updateUserInfo} />
+      <Grid gridRow={1}>
+        {posts.map((post) => (
+          <Post
+            key={post.postId}
+            post={post}
+            userId={authUser.uid}
+            currentUser={currentUser}
+          />
+        ))}
+      </Grid>
+    </Grid>
+
   );
 };
 

@@ -21,14 +21,14 @@ const AddnewPost = () => {
             commentCount: 0,
             likeCount: 0,
             userName: '',
-            userImage: ''
+            userImageUrl: ''
         })
         //setPost([...post, input]);
         setInput('');
     };
     return (
         <>
-            <div ClassName="App">
+            <div className="App">
                 <TextField
                     style={{
                         width: '90%',

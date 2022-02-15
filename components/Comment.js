@@ -11,8 +11,9 @@ import { Avatar } from "@mui/material";
 
 
 export default function Comment({ comment }) {
-  const { author, commentBody, createdAt, userImageUrl } = comment;
+  const { userName, commentBody, createdAt, userImageUrl } = comment;
   const dateCreatedAt = new Date(createdAt.toDate());
+
   return (
     <Card sx={{margin: "5px"}}>
       <CardContent sx={{display: "flex", flexWrap: "wrap"}}>
@@ -20,14 +21,14 @@ export default function Comment({ comment }) {
           <CardMedia
             component="img"
             height="40"
-            image={userImageUrl}
+            image={userImageUrl || "https://via.placeholder.com/150/b3d1ff/808080?text=UTabAPP"}
             alt="avatar"
           />
         </Avatar>
         <Typography gutterBottom variant="h5" component="div">
-          {author}
+          {userName}
         </Typography>
-        <Typography gutterBottom variant="subtitle2" component="span" sx={{alignSelf: "center"}}>
+        <Typography gutterBottom variant="subtitle2" component="span" sx={{alignSelf: "center", marginLeft: "5px"}}>
           posted ad {dateCreatedAt.toLocaleString()}
         </Typography>
 

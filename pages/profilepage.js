@@ -11,7 +11,6 @@ import TagsInput from "../components/TagsHobbies";
 import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
 
-
 // Popup function to redirect after updating profile
 const popUp = () => {
   toast.success("Updated Successfully!");
@@ -27,12 +26,12 @@ export default function ProfilePage({ currentUser, updateUserInfo }) {
   const handleImageChange = async (e) => {
     if (e.target.files[0]) {
       const userImage = e.target.files[0];
-     
+
       const uploadTask = storage.ref(`images/${userImage.name}`).put(userImage);
 
       uploadTask.on(
         "state_changed",
-        (snapshot) => { },
+        (snapshot) => {},
         (error) => {
           console.log(error);
         },
@@ -41,33 +40,37 @@ export default function ProfilePage({ currentUser, updateUserInfo }) {
             .ref(`images/${userImage.name}`)
             .getDownloadURL()
             .then((url) => {
-              setUser({ ...user, image: userImage.name, url: url });
+               setUser({ ...user, image: userImage.name, userImageUrl: url });
             });
         }
       );
     }
-
   };
- 
+
   // To delete the selected image file
   const removeSelectedImage = () => {
     setUser({ ...user, image: "" });
-    setUser({ ...user, url: "" });
+    setUser({ ...user, userImageUrl: "" });
   };
 
   // Form submission function
   const handleProfileUpload = async () => {
     //write data to firestore db
-    fire.firestore().collection("users").doc(authUser.uid).set({
-      userName: user.userName,
-      language: user.language,
-      location: user.location,
-      country: user.country,
-      url: user.url,
-      hobbies: user.hobbies,
-      image: user.image,
-    }).then(() => updateUserInfo(user));
-    
+    fire
+      .firestore()
+      .collection("users")
+      .doc(authUser.uid)
+      .set({
+        userName: user.userName,
+        language: user.language,
+        location: user.location,
+        country: user.country,
+        userImageUrl: user.userImageUrl,
+        hobbies: user.hobbies,
+        image: user.image,
+      })
+      .then(() => updateUserInfo(user));
+
     console.log(`user data successfully added to db under ${authUser.uid}`);
     popUp();
   };
@@ -78,28 +81,9 @@ export default function ProfilePage({ currentUser, updateUserInfo }) {
     setUser(updatedUser);
   };
 
-  useEffect(() => {
-    if (authUser) {
-      try {
-        //read data from firestore db, find user by uid into 'users' collection
-        db.collection("users")
-          .doc(authUser.uid)
-          .get()
-          .then((snapshot) => {
-            const user = snapshot.data();
-            if (user) {
-              setUser(user);
-            }
-          });
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }, [authUser]);
-
   return (
     <>
-        <Toaster />
+      <Toaster />
       <fieldset>
         <div style={{ display: "block" }}>
           <input
@@ -111,7 +95,7 @@ export default function ProfilePage({ currentUser, updateUserInfo }) {
           />
 
           <Image
-            src={user.url || "http://via.placeholder.com/400x300"}
+            src={user.userImageUrl || "http://via.placeholder.com/400x300"}
             placeholder="blur"
             blurDataURL="http://via.placeholder.com/400x300"
             alt="avatar"
@@ -176,8 +160,6 @@ export default function ProfilePage({ currentUser, updateUserInfo }) {
         <button type="submit" onClick={handleProfileUpload}>
           Save
         </button>
-        &nbsp;
-        <button onClick={() => router.push("/mainBoard")}>Cancel</button>
       </fieldset>
     </>
   );

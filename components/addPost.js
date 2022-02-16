@@ -7,7 +7,7 @@ import { inputAdornmentClasses } from "@mui/material";
 import AddnewPost from "../components/AddnewPost";
 import { FullscreenExit, ViewColumn } from "@mui/icons-material";
 
-const CreatePost = () => {
+const CreatePost = ({ currentUser }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -44,7 +44,7 @@ const CreatePost = () => {
             Write your Post
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <AddnewPost />
+            <AddnewPost currentUser={currentUser} />
           </Typography>
           <Button style={{ position: "absolute", left: "80%", bottom: "30%" }}
             onClick={handleClose}>

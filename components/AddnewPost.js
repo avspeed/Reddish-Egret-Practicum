@@ -7,7 +7,7 @@ import { useAuth } from "../components/context/authUserContext";
 import toast, { Toaster } from "react-hot-toast";
 import { inputAdornmentClasses } from "@mui/material";
 
-const AddnewPost = () => {
+const AddnewPost = ({ currentUser }) => {
 
     const { authUser } = useAuth();
     //const [post, setPost] = useState('[]');
@@ -20,8 +20,8 @@ const AddnewPost = () => {
             author: authUser.uid,
             commentCount: 0,
             likeCount: 0,
-            userName: '',
-            userImageUrl: ''
+            userName: currentUser.userName,
+            userImageUrl: currentUser.userImageUrl
         })
         //setPost([...post, input]);
         setInput('');

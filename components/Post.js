@@ -181,13 +181,14 @@ const Post = ({ post, userId, currentUser }) => {
 
           {post.author === authUser.uid && (
             <CardActions
+            sx={{ mr: "10px"}}
               onClick={() => onDeletePostHandle(post.postId, post.commentCount)}
             >
               <RiDeleteBin2Line aria-label="delete post button" size="25px" />
             </CardActions>
           )}
         </Box>
-        <CardActions disableSpacing>
+        <CardActions disableSpacing sx={{ justifyContent: "space-between", mr: "10px" }} >
           <IconButton
             aria-label="add to favorites"
             onClick={() => favoriteClick(post.postId)}
@@ -206,7 +207,7 @@ const Post = ({ post, userId, currentUser }) => {
             expand={expanded}
             onClick={() => handleExpandClick(post.postId)}
             aria-expanded={expanded}
-            aria-label="show more"
+            aria-label="show comments"
           >
             <ExpandMoreIcon />
             <Badge badgeContent={post.commentCount} color="primary" showZero>

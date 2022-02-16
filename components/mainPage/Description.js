@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import { fontWeight, height, positions } from "@mui/system";
 
 import React from "react";
@@ -18,7 +18,11 @@ export default function Description() {
   return (
     <Box sx={{ ...style, fontWeight: 'medium' }}>
       <Container>
+      <Grid Container>
+      <Grid item>
         <Typography variant="h3" mt={15}> Welcome to our community! </Typography>
+        </Grid>
+        <Grid item>
         <p>
           This app was created by immigrants to make it easier to settle into a
           New Country for newcomers. We know how hard it can be. And we are here
@@ -33,7 +37,10 @@ export default function Description() {
           together and let&apos;s grow together. If you register you will be able
           to post and share your concerns with others.
         </p>
+        </Grid>
+        </Grid>
       </Container>
-    </Box>
+      </Box>
+    
   );
 }

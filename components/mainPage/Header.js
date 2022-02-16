@@ -91,22 +91,7 @@ const Header = () => {
                     Home{" "}
                   </Button>
 
-                  <Button
-                    color="inherit"
-                    sx={{
-                      "&:hover": {
-                        color: "black",
-                        backgroundColor: "white",
-                      },
-                      color: "white",
-                      backgroundColor: "black",
-                      m: 2,
-                    }}
-                    href={"/mainBoard"}
-                  >
-                    {" "}
-                    Main board{" "}
-                  </Button>
+                 
 
                   <Button
                     color="inherit"

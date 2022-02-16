@@ -6,13 +6,14 @@ const Footer = () => {
   return (
     <Box component="footer" sx={{
        py: 3,
+       bottom: 0,
     position: "fixed",
       left: 0,
-      bottom: 0,
       width: "100%",
       backgroundColor: "gray",
       color: "white",
-      textAlign: "center"
+      textAlign: "center",
+      
       }}>&copy; 2022 UTab App</Box>
    
     

@@ -151,26 +151,29 @@ const MainBoard = () => {
 
 
   return (
-    <Grid
-      display="grid"
-      gridTemplateColumns="repeat(2, 1fr)"
-      container
-      sx={{ padding: "5px" }}
-      columns={2}
-    >
-       <CreatePost />
-      <ProfileCard currentUser={currentUser} updateUserInfo={updateUserInfo} />
-      <Grid gridRow={1}>
-        {posts.map((post) => (
-          <Post
-            key={post.postId}
-            post={post}
-            userId={authUser.uid}
-            currentUser={currentUser}
-          />
-        ))}
+    <>
+      <CreatePost currentUser={currentUser} />
+      <Grid
+        display="grid"
+        gridTemplateColumns="repeat(2, 1fr)"
+        container
+        sx={{ padding: "5px" }}
+        columns={2}
+      >
+
+        <ProfileCard currentUser={currentUser} updateUserInfo={updateUserInfo} />
+        <Grid gridRow={1}>
+          {posts.map((post) => (
+            <Post
+              key={post.postId}
+              post={post}
+              userId={authUser.uid}
+              currentUser={currentUser}
+            />
+          ))}
+        </Grid>
       </Grid>
-    </Grid>
+    </>
 
   );
 };

@@ -60,7 +60,7 @@ async function fetchComments(postId) {
   });
 }
 //function to delete a doc form firestore collection
-async function deleteDocFromCollection(collection, docId) {
+export async function deleteDocFromCollection(collection, docId) {
   db.collection(collection)
     .doc(docId)
     .delete()
@@ -147,7 +147,6 @@ const Post = ({ post, userId, currentUser }) => {
   };
 
   const dateCreatedAt = new Date(post.createdAt.toDate());
-  console.log(post);
 
   return (
     <Grid item xs={6} md={6} sx={{ margin: "10px 0px" }} columns={1}>

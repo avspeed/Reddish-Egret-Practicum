@@ -5,7 +5,7 @@ import Description from "../components/mainPage/Description";
 import Cardmedia from "../components/Cards/Cardmedia";
 
 const Home = () => {
-  console.log(useAuth());
+
   return (
     <>
       <Description />

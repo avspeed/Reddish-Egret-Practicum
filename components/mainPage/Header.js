@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth } from "../context/authUserContext";
+import { useRouter } from "next/router";
 import {
   AppBar,
   CardMedia,
@@ -10,6 +11,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+
 
 const style = {
   display: { xs: "block", sm: "none" },
@@ -22,6 +24,9 @@ const Header = () => {
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const router = useRouter();
+  const mainboard = router.pathname === "/mainBoard";
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -37,75 +42,58 @@ const Header = () => {
             sx={{ width: "auto", height: 60, marginRight: "auto" }}
           />
 
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-            onClick={handleMenu}
-          >
-            <MenuIcon
-              sx={{
-                ...style,
-                "&:hover": {
-                  color: "black",
-                  backgroundColor: "white",
-                },
+          <div>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+              onClick={handleMenu}
+            >
+              <MenuIcon
+                sx={{
+                  ...style,
+                  "&:hover": {
+                    color: "black",
+                    backgroundColor: "white",
+                  },
+                }}
+              />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
               }}
-            />
-          </IconButton>
-          <Menu
-            id="menu-appbar"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            {!loading && authUser ? (
-              <div>
-                <Button
-                  color="inherit"
-                  sx={{
-                    "&:hover": {
-                      color: "black",
-                      backgroundColor: "white",
-                    },
-                    color: "white",
-                    backgroundColor: "black",
-                    m: 2,
-                  }}
-                  href={"/"}
-                >
-                  {" "}
-                  Home{" "}
-                </Button>
-
-                <Button
-                  color="inherit"
-                  sx={{
-                    "&:hover": {
-                      color: "black",
-                      backgroundColor: "white",
-                    },
-                    color: "white",
-                    backgroundColor: "black",
-                    m: 2,
-                  }}
-                  href={"/mainBoard"}
-                >
-                  {" "}
-                  Main board{" "}
-                </Button>
-
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              {!loading && authUser ? (
+                <div>
+                  <Button
+                    color="inherit"
+                    sx={{
+                      "&:hover": {
+                        color: "black",
+                        backgroundColor: "white",
+                      },
+                      color: "white",
+                      backgroundColor: "black",
+                      m: 2,
+                    }}
+                    href={mainboard ? "/" : "/mainBoard"}
+                  >
+                    {mainboard ? "Home" : "Main Board"}
+                  </Button>
+          
                 <Button
                   color="inherit"
                   sx={{
@@ -175,6 +163,7 @@ const Header = () => {
               </Box>
             )}
           </Menu>
+</div>
 
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {!loading && authUser ? (
@@ -182,10 +171,9 @@ const Header = () => {
                 <Button
                   color="inherit"
                   sx={{ backgroundColor: "black", m: 2 }}
-                  href={"/"}
+                  href={mainboard ? "/" : "/mainBoard"}
                 >
-                  {" "}
-                  Home{" "}
+                  {mainboard ? "Home" : "Main Board"}
                 </Button>
                 <Button
                   color="inherit"

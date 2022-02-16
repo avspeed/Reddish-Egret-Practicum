@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import React from "react";
 
 const Footer = () => {
+  return (
     <Box
       component="footer"
       sx={{
@@ -17,7 +18,7 @@ const Footer = () => {
     >
       &copy; 2022 UTab App
     </Box>
-  );
+  )
 };
 
 export default Footer;

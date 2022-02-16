@@ -7,9 +7,6 @@ const Footer = () => {
       component="footer"
       sx={{
         py: 2,
-        position: "fixed",
-        left: 0,
-        bottom: 0,
         width: "100%",
         backgroundColor: "gray",
         color: "white",

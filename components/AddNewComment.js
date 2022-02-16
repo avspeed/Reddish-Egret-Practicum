@@ -18,7 +18,6 @@ export default function AddNeWComment({ postId, currentUser }) {
   const postRef = db.collection("posts").doc(postId);
   
   const saveComment = (postId) => {
-    console.log("save comment")
     const time = new Date();
     try {
       db.collection("comments").doc().set({

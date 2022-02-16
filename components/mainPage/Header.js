@@ -1,6 +1,6 @@
 import React from "react";
-import fire from "../../config/fire-config";
 import { useAuth } from "../context/authUserContext";
+import { useRouter } from "next/router";
 import {
   AppBar,
   Avatar,
@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
+
 const style = {
   display: { xs: "block", sm: "none" },
 };
@@ -19,9 +20,13 @@ const style = {
 const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { authUser, loading, signOut } = useAuth();
+
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const router = useRouter();
+  const mainboard = router.pathname === "/mainBoard";
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -71,8 +76,6 @@ const Header = () => {
             >
               {!loading && authUser ? (
                 <div>
-
-
                   <Button
                     color="inherit"
                     sx={{
@@ -84,12 +87,10 @@ const Header = () => {
                       backgroundColor: "black",
                       m: 2,
                     }}
-                    href={"/"}
+                    href={mainboard ? "/" : "/mainBoard"}
                   >
-                    {" "}
-                    Home{" "}
+                    {mainboard ? "Home" : "Main Board"}
                   </Button>
-
                   <Button
                     color="inherit"
                     sx={{
@@ -183,10 +184,9 @@ const Header = () => {
                 <Button
                   color="inherit"
                   sx={{ backgroundColor: "black", m: 2 }}
-                  href={"/"}
+                  href={mainboard ? "/" : "/mainBoard"}
                 >
-                  {" "}
-                  Home{" "}
+                  {mainboard ? "Home" : "Main Board"}
                 </Button>
                 <Button
                   color="inherit"

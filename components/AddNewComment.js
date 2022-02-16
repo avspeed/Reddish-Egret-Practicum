@@ -49,6 +49,7 @@ export default function AddNeWComment({ postId, currentUser }) {
         variant="filled"
         value={comment}
         onChange={(e) => setComment(e.target.value)}
+        sx={{ mb: "2px"}}
       />
 
       <Button

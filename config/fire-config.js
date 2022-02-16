@@ -22,5 +22,5 @@ const firebaseConfig = {
   const fire = firebase;
   export let db = firebase.firestore();
   export const storage = firebase.storage();
-  export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
+  export const timestamp = firebase.firestore.Timestamp.now()
   export default fire;

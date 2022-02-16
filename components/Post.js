@@ -44,16 +44,7 @@ function commentsLabel(count) {
 
 async function fetchComments(postId) {
   return new Promise((resolve) => {
-    /* db.collection("comments").onSnapshot((doc) => {
-      
-      let comments = [];
-      doc.forEach((doc) => {
-        console.log(doc)
-        comments.push(doc.data());
-      });
-
-      resolve(comments);
-    }); */
+ 
     db.collection("comments")
       .where("postId", "==", postId)
       .get()
@@ -128,7 +119,7 @@ const Post = ({ post, userId, currentUser }) => {
   };
 
   const dateCreatedAt = new Date(post.createdAt.toDate());
-
+console.log(post)
   return (
     <Grid item xs={6} md={6} sx={{ margin: "10px 0px" }} columns={1}>
       <Card>

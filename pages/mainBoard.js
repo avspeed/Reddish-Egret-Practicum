@@ -5,6 +5,10 @@ import { useAuth } from "../components/context/authUserContext";
 
 import Post from "../components/Post";
 import ProfileCard from "../components/ProfileCard";
+import CreatePost from "../components/addPost";
+
+import Grid from "@mui/material/Grid";
+
 
 function postsCollection() {
   return new Promise((resolve) => {
@@ -31,6 +35,20 @@ function likesCollection(userUid) {
       });
   });
 }
+function userCommentsCollection(userUid) {
+  return new Promise((resolve) => {
+    db.collection("comments")
+      .where("author", "==", userUid)
+      .get()
+      .then((querySnapshot) => {
+        let usersComments = [];
+        querySnapshot.forEach((doc) => {
+          usersComments.push(doc.id);
+        });
+        resolve(usersComments);
+      });
+  });
+}
 async function checkForLikedPosts(userUid) {
   const posts = await postsCollection();
   const userLikes = await likesCollection(userUid);
@@ -43,9 +61,41 @@ async function checkForLikedPosts(userUid) {
   });
   return posts;
 }
+async function currentUserPosts(userUid) {
+  const posts = await postsCollection();
+  const userPosts = [];
+  posts.forEach((post) => {
+    if (post.author === userUid) {
+      userPosts.push(post.postId);
+    }
+  });
+
+  return userPosts;
+}
+function updateDataInDb(docs, collection, dataToUpdate) {
+  docs.forEach(async (doc) => {
+    let docRef = db.collection(collection).doc(doc);
+    try {
+      await docRef.update(dataToUpdate);
+      console.log("Document successfully updated!");
+    } catch (error) {
+      // The document probably doesn't exist.
+      console.error("Error updating document: ", error);
+    }
+  });
+}
 
 const MainBoard = () => {
   const [posts, setPosts] = useState([]);
+  const [currentUser, setCurrentUser] = useState({
+    userName: "",
+    country: "",
+    hobbies: [],
+    image: "",
+    language: "",
+    location: "",
+    userImageUrl: "",
+  });
 
   const { authUser, loading } = useAuth();
 
@@ -56,6 +106,28 @@ const MainBoard = () => {
     if (!loading && authUser) router.push("/");
   }, [authUser, loading, router]); */
 
+  //callback function is being called when user updates profile
+  //it updates currentUser state, and updated userImgUrl pass and userName to each users post or comment
+  const updateUserInfo = (user) => {
+    //check if userName of userImage Url have changed - in this case update data for comments and posts
+    if (
+      currentUser.userName !== user.userName ||
+      currentUser.userImageUrl !== user.userImageUrl
+    ) {
+      const dataToSend = {
+        userImageUrl: user.userImageUrl,
+        userName: user.userName,
+      };
+      const userPosts = currentUserPosts(authUser.uid).then((data) => {
+        updateDataInDb(data, "posts", dataToSend);
+      });
+      const userComments = userCommentsCollection(authUser.uid).then((data) => {
+        updateDataInDb(data, "comments", dataToSend);
+      });
+    }
+    setCurrentUser(user);
+  };
+
   useEffect(() => {
     if (authUser) {
       //fetch all posts and subscribe for updates
@@ -64,21 +136,45 @@ const MainBoard = () => {
           setPosts(response);
         });
       });
+      //find current user into collention "users"
+      db.collection("users")
+        .doc(authUser.uid)
+        .get()
+        .then((snapshot) => {
+          const user = snapshot.data();
+          if (user) {
+            setCurrentUser(user);
+          }
+        });
     }
   }, [authUser]);
 
- // console.log("all posts", posts);
+
   return (
     <>
-      <ProfileCard />
+      <CreatePost currentUser={currentUser} />
+      <Grid
+        display="grid"
+        gridTemplateColumns="repeat(2, 1fr)"
+        container
+        sx={{ padding: "5px" }}
+        columns={2}
+      >
 
-      <div style={{ position: "absolute", left: "80%" }}>
-        Profile screenshot
-      </div>
-      {posts.map((post) => (
-        <Post key={post.postId} post={post} authUser={authUser} />
-      ))}
+        <ProfileCard currentUser={currentUser} updateUserInfo={updateUserInfo} />
+        <Grid gridRow={1}>
+          {posts.map((post) => (
+            <Post
+              key={post.postId}
+              post={post}
+              userId={authUser.uid}
+              currentUser={currentUser}
+            />
+          ))}
+        </Grid>
+      </Grid>
     </>
+
   );
 };
 

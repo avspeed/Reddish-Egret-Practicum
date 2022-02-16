@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Comment from "./Comment";
 import AddNeWComment from "./AddNewComment";
+import { useAuth } from "../components/context/authUserContext";
 import PropTypes from "prop-types";
 import { RiDeleteBin2Line } from "react-icons/ri";
 
@@ -75,6 +76,7 @@ const Post = ({ post, userId, currentUser }) => {
   const [expanded, setExpanded] = useState(false);
   const [favorite, setFavorite] = useState(post.liked);
 
+  const { authUser } = useAuth();
   const [comments, setComments] = useState();
 
   const favoriteClick = async (postId) => {
@@ -114,7 +116,7 @@ const Post = ({ post, userId, currentUser }) => {
       });
     }
   };
-//when expand button under the post clicked comments for this post are fetched
+  //when expand button under the post clicked comments for this post are fetched
   const handleExpandClick = (postId) => {
     setExpanded(!expanded);
     if (!expanded) {
@@ -145,6 +147,7 @@ const Post = ({ post, userId, currentUser }) => {
   };
 
   const dateCreatedAt = new Date(post.createdAt.toDate());
+  console.log(post);
 
   return (
     <Grid item xs={6} md={6} sx={{ margin: "10px 0px" }} columns={1}>
@@ -177,11 +180,13 @@ const Post = ({ post, userId, currentUser }) => {
             </Typography>
           </CardContent>
 
-          <CardActions
-            onClick={() => onDeletePostHandle(post.postId, post.commentCount)}
-          >
-            <RiDeleteBin2Line aria-label="delete post button" size="25px" />
-          </CardActions>
+          {post.author === authUser.uid && (
+            <CardActions
+              onClick={() => onDeletePostHandle(post.postId, post.commentCount)}
+            >
+              <RiDeleteBin2Line aria-label="delete post button" size="25px" />
+            </CardActions>
+          )}
         </Box>
         <CardActions disableSpacing>
           <IconButton

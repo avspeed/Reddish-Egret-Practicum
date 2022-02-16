@@ -44,16 +44,7 @@ function commentsLabel(count) {
 
 async function fetchComments(postId) {
   return new Promise((resolve) => {
-    /* db.collection("comments").onSnapshot((doc) => {
-      
-      let comments = [];
-      doc.forEach((doc) => {
-        console.log(doc)
-        comments.push(doc.data());
-      });
-
-      resolve(comments);
-    }); */
+ 
     db.collection("comments")
       .where("postId", "==", postId)
       .get()

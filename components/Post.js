@@ -21,6 +21,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 
 import { db } from "../config/fire-config";
 import firebase from "firebase";
+import { responseSymbol } from "next/dist/server/web/spec-compliant/fetch-event";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -42,7 +43,7 @@ function commentsLabel(count) {
   }
   return `${count} comments`;
 }
-
+//fetch comments for particular post
 async function fetchComments(postId) {
   return new Promise((resolve) => {
     db.collection("comments")
@@ -51,19 +52,23 @@ async function fetchComments(postId) {
       .then((querySnapshot) => {
         let comments = [];
         querySnapshot.forEach((doc) => {
-          comments.push({...doc.data(), commentId: doc.id});
+          comments.push({ ...doc.data(), commentId: doc.id });
         });
         resolve(comments);
       });
   });
 }
-
+//function to delete a doc form firestore collection
 async function deleteDocFromCollection(collection, docId) {
-  db.collection(collection).doc(docId).delete().then(() => {
-    console.log("Document successfully deleted!")
-  }).catch((error) => {
-    console.error("Error removing document: ", error);
-});
+  db.collection(collection)
+    .doc(docId)
+    .delete()
+    .then(() => {
+      console.log("Document successfully deleted!");
+    })
+    .catch((error) => {
+      console.error("Error removing document: ", error);
+    });
 }
 
 const Post = ({ post, userId, currentUser }) => {
@@ -109,11 +114,10 @@ const Post = ({ post, userId, currentUser }) => {
       });
     }
   };
-
+//when expand button under the post clicked comments for this post are fetched
   const handleExpandClick = (postId) => {
     setExpanded(!expanded);
     if (!expanded) {
-      console.log(expanded)
       const unsibscribe = db.collection("comments").onSnapshot((docs) => {
         const comments = new Promise((resolve) => {
           resolve(fetchComments(postId));
@@ -125,17 +129,23 @@ const Post = ({ post, userId, currentUser }) => {
     }
   };
 
+  //delete post with it comments from firestore
   const onDeletePostHandle = async (postId, commentCount) => {
-    await deleteDocFromCollection("posts", postId)
-    if(commentCount) {
-      console.log("some comments to delete")
-
+    await deleteDocFromCollection("posts", postId);
+    if (commentCount) {
+      const commentsToDelete = new Promise((resolve) => {
+        resolve(fetchComments(postId));
+      });
+      commentsToDelete.then((resp) => {
+        resp.forEach((comment) =>
+          deleteDocFromCollection("comments", comment.commentId)
+        );
+      });
     }
   };
 
   const dateCreatedAt = new Date(post.createdAt.toDate());
-console.log(post)
-console.log(comments)
+
   return (
     <Grid item xs={6} md={6} sx={{ margin: "10px 0px" }} columns={1}>
       <Card>
@@ -167,7 +177,9 @@ console.log(comments)
             </Typography>
           </CardContent>
 
-          <CardActions onClick={() => onDeletePostHandle(post.postId, post.commentCount)}>
+          <CardActions
+            onClick={() => onDeletePostHandle(post.postId, post.commentCount)}
+          >
             <RiDeleteBin2Line aria-label="delete post button" size="25px" />
           </CardActions>
         </Box>

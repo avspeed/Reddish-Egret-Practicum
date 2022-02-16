@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Comment from "./Comment";
 import AddNeWComment from "./AddNewComment";
 import PropTypes from "prop-types";
+import { RiDeleteBin2Line } from "react-icons/ri";
 
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -25,7 +26,7 @@ const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
-    transform: !expand ? "rotate(0deg)" : "rotate(360deg)",
+  transform: !expand ? "rotate(0deg)" : "rotate(360deg)",
   marginLeft: "auto",
   transition: theme.transitions.create("transform", {
     duration: theme.transitions.duration.shortest,
@@ -44,18 +45,25 @@ function commentsLabel(count) {
 
 async function fetchComments(postId) {
   return new Promise((resolve) => {
- 
     db.collection("comments")
       .where("postId", "==", postId)
       .get()
       .then((querySnapshot) => {
         let comments = [];
         querySnapshot.forEach((doc) => {
-          comments.push(doc.data());
+          comments.push({...doc.data(), commentId: doc.id});
         });
         resolve(comments);
       });
   });
+}
+
+async function deleteDocFromCollection(collection, docId) {
+  db.collection(collection).doc(docId).delete().then(() => {
+    console.log("Document successfully deleted!")
+  }).catch((error) => {
+    console.error("Error removing document: ", error);
+});
 }
 
 const Post = ({ post, userId, currentUser }) => {
@@ -65,7 +73,6 @@ const Post = ({ post, userId, currentUser }) => {
   const [comments, setComments] = useState();
 
   const favoriteClick = async (postId) => {
-    console.log(postId);
     const fav = !favorite;
     setFavorite(fav);
 
@@ -106,6 +113,7 @@ const Post = ({ post, userId, currentUser }) => {
   const handleExpandClick = (postId) => {
     setExpanded(!expanded);
     if (!expanded) {
+      console.log(expanded)
       const unsibscribe = db.collection("comments").onSnapshot((docs) => {
         const comments = new Promise((resolve) => {
           resolve(fetchComments(postId));
@@ -114,16 +122,24 @@ const Post = ({ post, userId, currentUser }) => {
           setComments(resp);
         });
       });
-      
+    }
+  };
+
+  const onDeletePostHandle = async (postId, commentCount) => {
+    await deleteDocFromCollection("posts", postId)
+    if(commentCount) {
+      console.log("some comments to delete")
+
     }
   };
 
   const dateCreatedAt = new Date(post.createdAt.toDate());
-
+console.log(post)
+console.log(comments)
   return (
     <Grid item xs={6} md={6} sx={{ margin: "10px 0px" }} columns={1}>
       <Card>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <CardMedia
             component="img"
             sx={{
@@ -131,11 +147,14 @@ const Post = ({ post, userId, currentUser }) => {
               height: 120,
               display: { xs: "none", sm: "block" },
             }}
-            image={post.userImageUrl || "https://via.placeholder.com/150/b3d1ff/808080?text=UTabAPP"}
+            image={
+              post.userImageUrl ||
+              "https://via.placeholder.com/150/b3d1ff/808080?text=UTabAPP"
+            }
             alt={"users avatar"}
           />
 
-          <CardContent sx={{ display: "block" }}>
+          <CardContent sx={{ display: "block", flexGrow: 2 }}>
             <Typography component="h2" variant="h5">
               {post.userName}
             </Typography>
@@ -147,6 +166,10 @@ const Post = ({ post, userId, currentUser }) => {
               {post.postBody}
             </Typography>
           </CardContent>
+
+          <CardActions onClick={() => onDeletePostHandle(post.postId, post.commentCount)}>
+            <RiDeleteBin2Line aria-label="delete post button" size="25px" />
+          </CardActions>
         </Box>
         <CardActions disableSpacing>
           <IconButton

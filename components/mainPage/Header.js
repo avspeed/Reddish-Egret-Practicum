@@ -165,6 +165,7 @@ const Header = () => {
           </Menu>
 </div>
 
+
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {!loading && authUser ? (
               <>

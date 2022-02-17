@@ -9,7 +9,6 @@ import CreatePost from "../components/addPost";
 
 import Grid from "@mui/material/Grid";
 
-
 function postsCollection() {
   return new Promise((resolve) => {
     db.collection("posts").onSnapshot((docs) => {
@@ -99,12 +98,31 @@ const MainBoard = () => {
 
   const { authUser, loading } = useAuth();
 
-  /*  const router = useRouter(); */
+  const router = useRouter();
 
   // Listen for changes on loading and authUser, redirect if needed
-  /*  useEffect(() => {
-    if (!loading && authUser) router.push("/");
-  }, [authUser, loading, router]); */
+
+  useEffect(() => {
+    if (loading && !authUser) router.push("/");
+    if (authUser) {
+      //fetch all posts and subscribe for updates
+      db.collection("posts").onSnapshot((docs) => {
+        checkForLikedPosts(authUser.uid).then((response) => {
+          setPosts(response);
+        });
+      });
+      //find current user into collention "users"
+      db.collection("users")
+        .doc(authUser.uid)
+        .get()
+        .then((snapshot) => {
+          const user = snapshot.data();
+          if (user) {
+            setCurrentUser(user);
+          }
+        });
+    }
+  }, [authUser, loading, router]);
 
   //callback function is being called when user updates profile
   //it updates currentUser state, and updated userImgUrl pass and userName to each users post or comment
@@ -128,28 +146,9 @@ const MainBoard = () => {
     setCurrentUser(user);
   };
 
-  useEffect(() => {
-    if (authUser) {
-      //fetch all posts and subscribe for updates
-      db.collection("posts").onSnapshot((docs) => {
-        checkForLikedPosts(authUser.uid).then((response) => {
-          setPosts(response);
-        });
-      });
-      //find current user into collention "users"
-      db.collection("users")
-        .doc(authUser.uid)
-        .get()
-        .then((snapshot) => {
-          const user = snapshot.data();
-          if (user) {
-            setCurrentUser(user);
-          }
-        });
-    }
-  }, [authUser]);
 
-
+console.log(currentUser)
+console.log(authUser)
   return (
     <>
       <CreatePost currentUser={currentUser} />
@@ -160,21 +159,26 @@ const MainBoard = () => {
         sx={{ padding: "5px" }}
         columns={2}
       >
+      {/* {user ? : } */}
+        <ProfileCard
+          currentUser={currentUser}
+          updateUserInfo={updateUserInfo}
+        />
 
-        <ProfileCard currentUser={currentUser} updateUserInfo={updateUserInfo} />
-        <Grid gridRow={1}>
-          {posts.map((post) => (
-            <Post
-              key={post.postId}
-              post={post}
-              userId={authUser.uid}
-              currentUser={currentUser}
-            />
-          ))}
-        </Grid>
+        {authUser && posts ? (
+          <Grid gridRow={1}>
+            {posts.map((post) => (
+              <Post
+                key={post.postId}
+                post={post}
+                userId={authUser.uid}
+                currentUser={currentUser}
+              />
+            ))}
+          </Grid>
+        ) : null}
       </Grid>
     </>
-
   );
 };
 

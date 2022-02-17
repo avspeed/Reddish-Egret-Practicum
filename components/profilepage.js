@@ -3,11 +3,11 @@ import fire from "../config/fire-config";
 import "firebase/firestore";
 import { storage, db } from "../config/fire-config";
 import { CountryDropdown } from "react-country-region-selector";
-import Languages from "../components/Languages";
+import Languages from "./Languages";
 import "@firebase/auth";
 import { useRouter } from "next/router";
-import { useAuth } from "../components/context/authUserContext";
-import TagsInput from "../components/TagsHobbies";
+import { useAuth } from "./context/authUserContext";
+import TagsInput from "./TagsHobbies";
 import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
 

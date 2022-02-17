@@ -21,7 +21,7 @@ const Jobs = () => {
       <Box p={2} mb={2} className={classes.wrapper}>
         <Grid container alignItems="center">
           <Grid item xs className={classes.jobs}>
-            <Typography variant='subtitle1'>  <Link href="https://www.linkedin.com"><a>Linkedin</a></Link></Typography>
+            <Typography variant='subtitle1'>  <Link href="https://www.linkedin.com">Linkedin</Link></Typography>
             <Typography variant='subtitle2'>Google</Typography>
           </Grid>
           <Grid item xs className={classes.items}>
@@ -34,7 +34,7 @@ const Jobs = () => {
       <Box p={2} mb={2} className={classes.wrapper}>
         <Grid container alignItems="center">
           <Grid item xs className={classes.jobs}>
-            <Typography variant='subtitle1'><Link href="https://www.indeed.com"><a>indeed</a></Link></Typography>
+            <Typography variant='subtitle1'><Link href="https://www.indeed.com">indeed</Link></Typography>
             <Typography variant='subtitle2'>facebook</Typography>
           </Grid>
           <Grid item xs className={classes.items}>

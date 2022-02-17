@@ -9,7 +9,6 @@ import CreatePost from "../components/addPost";
 
 import Grid from "@mui/material/Grid";
 
-
 function postsCollection() {
   return new Promise((resolve) => {
     db.collection("posts").onSnapshot((docs) => {
@@ -99,7 +98,7 @@ const MainBoard = () => {
 
   const { authUser, loading } = useAuth();
 
-  /*  const router = useRouter(); */
+   const router = useRouter();
 
   // Listen for changes on loading and authUser, redirect if needed
   /*  useEffect(() => {
@@ -129,6 +128,7 @@ const MainBoard = () => {
   };
 
   useEffect(() => {
+    if (loading && !authUser) router.push("/");
     if (authUser) {
       //fetch all posts and subscribe for updates
       db.collection("posts").onSnapshot((docs) => {
@@ -147,9 +147,9 @@ const MainBoard = () => {
           }
         });
     }
-  }, [authUser]);
-
-
+  }, [authUser, loading, router]);
+console.log(currentUser)
+console.log(authUser)
   return (
     <>
       <CreatePost currentUser={currentUser} />
@@ -160,21 +160,26 @@ const MainBoard = () => {
         sx={{ padding: "5px" }}
         columns={2}
       >
+      {/* {user ? : } */}
+        <ProfileCard
+          currentUser={currentUser}
+          updateUserInfo={updateUserInfo}
+        />
 
-        <ProfileCard currentUser={currentUser} updateUserInfo={updateUserInfo} />
-        <Grid gridRow={1}>
-          {posts.map((post) => (
-            <Post
-              key={post.postId}
-              post={post}
-              userId={authUser.uid}
-              currentUser={currentUser}
-            />
-          ))}
-        </Grid>
+        {posts ? (
+          <Grid gridRow={1}>
+            {posts.map((post) => (
+              <Post
+                key={post.postId}
+                post={post}
+                userId={authUser.uid}
+                currentUser={currentUser}
+              />
+            ))}
+          </Grid>
+        ) : null}
       </Grid>
     </>
-
   );
 };
 

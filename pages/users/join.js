@@ -44,7 +44,7 @@ export default function Register() {
           toast.success("Success!")
           //if a new user - push to profile page, if not - main board
           if (authUser.additionalUserInfo.isNewUser) {
-            router.push("/profilepage");
+            router.push("/mainBoard");
           } else {
             router.push("/mainBoard");
           }

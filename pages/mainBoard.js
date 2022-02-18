@@ -147,7 +147,7 @@ const MainBoard = () => {
         display="grid"
         gridTemplateColumns="2fr 1fr"
         gridTemplateRows="4rem 1fr"
-        columnSpacing={2}
+        gap={2}
         container
         sx={{ padding: "20px", marginLeft: "5px" }}
         columns={2}
@@ -158,7 +158,7 @@ const MainBoard = () => {
         />
 
         <CreatePost currentUser={currentUser} />
-        
+
         {authUser && posts ? (
           <Grid gridRow={2}>
             {posts.map((post) => (

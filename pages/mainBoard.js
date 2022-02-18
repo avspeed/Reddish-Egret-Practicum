@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../config/fire-config";
-import { useRouter } from "next/router";
 import { useAuth } from "../components/context/authUserContext";
 
 import Post from "../components/Post";
 import ProfileCard from "../components/ProfileCard";
-import CreatePost from "../components/addPost";
+import CreatePost from "../components/CreatePost";
 
 import Grid from "@mui/material/Grid";
 
@@ -68,7 +67,6 @@ async function currentUserPosts(userUid) {
       userPosts.push(post.postId);
     }
   });
-
   return userPosts;
 }
 function updateDataInDb(docs, collection, dataToUpdate) {
@@ -98,12 +96,9 @@ const MainBoard = () => {
 
   const { authUser, loading } = useAuth();
 
-  const router = useRouter();
-
   // Listen for changes on loading and authUser, redirect if needed
 
   useEffect(() => {
-/*     if (loading && !authUser) router.push("/"); */
     if (authUser) {
       //fetch all posts and subscribe for updates
       db.collection("posts").onSnapshot((docs) => {
@@ -122,7 +117,7 @@ const MainBoard = () => {
           }
         });
     }
-  }, [authUser, loading, router]);
+  }, [authUser, loading]);
 
   //callback function is being called when user updates profile
   //it updates currentUser state, and updated userImgUrl pass and userName to each users post or comment
@@ -146,27 +141,26 @@ const MainBoard = () => {
     setCurrentUser(user);
   };
 
-
-console.log(currentUser)
-console.log(authUser)
   return (
     <>
-      <CreatePost currentUser={currentUser} />
       <Grid
         display="grid"
-        gridTemplateColumns="repeat(2, 1fr)"
+        gridTemplateColumns="2fr 1fr"
+        gridTemplateRows="4rem 1fr"
+        columnSpacing={2}
         container
-        sx={{ padding: "5px" }}
+        sx={{ padding: "20px", marginLeft: "5px" }}
         columns={2}
       >
-      {/* {user ? : } */}
         <ProfileCard
           currentUser={currentUser}
           updateUserInfo={updateUserInfo}
         />
 
+        <CreatePost currentUser={currentUser} />
+        
         {authUser && posts ? (
-          <Grid gridRow={1}>
+          <Grid gridRow={2}>
             {posts.map((post) => (
               <Post
                 key={post.postId}

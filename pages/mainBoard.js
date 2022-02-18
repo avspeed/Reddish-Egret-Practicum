@@ -103,7 +103,7 @@ const MainBoard = () => {
   // Listen for changes on loading and authUser, redirect if needed
 
   useEffect(() => {
-    if (loading && !authUser) router.push("/");
+/*     if (loading && !authUser) router.push("/"); */
     if (authUser) {
       //fetch all posts and subscribe for updates
       db.collection("posts").onSnapshot((docs) => {

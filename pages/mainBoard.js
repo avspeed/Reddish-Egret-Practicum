@@ -8,6 +8,7 @@ import ProfileCard from "../components/ProfileCard";
 import CreatePost from "../components/addPost";
 
 import Grid from "@mui/material/Grid";
+import { Typography } from "@mui/material";
 
 
 function postsCollection() {

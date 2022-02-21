@@ -26,7 +26,7 @@ const Jobs = () => {
           </Grid>
           <Grid item xs className={classes.items}>
 
-            <p> connect the world’s professionals to make them more productive and successful</p>
+            <p>Connect the world's professionals to make them more productive and successful</p>
 
           </Grid>
         </Grid>
@@ -39,7 +39,7 @@ const Jobs = () => {
           </Grid>
           <Grid item xs className={classes.items}>
 
-            <p>  job site in the world1 with over 250 million unique visitors2 every month.
+            <p>Job site in the world with over 250 million unique visitors every month.
               Indeed strives to put job seekers first, giving them free access to search for jobs, post resumes,
               and research companies. Every day, we connect millions of people to new opportunities.</p>
 
@@ -54,7 +54,7 @@ const Jobs = () => {
           </Grid>
           <Grid item xs className={classes.items}>
 
-            <p> GovernmentJobs.com is the only government sector job board created from the world's foremost fully integrated recruitment,
+            <p>Government Jobs is the only government sector job board created from the world's for most fully integrated recruitment,
               selection and applicant tracking system called NEOGOV Insight designed specifically for public sector employers</p>
 
           </Grid>

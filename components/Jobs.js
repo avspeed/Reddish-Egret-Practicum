@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 
 }));
 const Jobs = () => {
-  const classes = useStyles();
+  const classes = useStyles(); 
   return (
     <>
 
@@ -26,7 +26,7 @@ const Jobs = () => {
           </Grid>
           <Grid item xs className={classes.items}>
 
-            <p>Connect the world's professionals to make them more productive and successful</p>
+            <p>Connect the world&apos;s professionals to make them more productive and successful</p>
 
           </Grid>
         </Grid>
@@ -68,7 +68,7 @@ const Jobs = () => {
           </Grid>
           <Grid item xs className={classes.items}>
 
-            <p>At CareerBuilder, we’ve been giving people the tools they need to find personal
+            <p>At CareerBuilder, we&apos;ve been giving people the tools they need to find personal
               success for the last 20+ years—from the hundreds of thousands of employers
               seeking great talent to the millions of jobseekers out there looking for the right opportunities. </p>
 

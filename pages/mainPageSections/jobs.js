@@ -25,7 +25,7 @@ const Jobs = () => {
           </Grid>
           <Grid item xs className={classes.items}>
 
-            <p>Connect the world’s professionals to make them more productive and successful</p>
+            <p>Connect the world&apos;s professionals to make them more productive and successful.</p>
 
           </Grid>
         </Grid>
@@ -52,7 +52,7 @@ const Jobs = () => {
           <Grid item xs className={classes.items}>
 
             <p>GovernmentJobs.com is the only government sector job board created from the world's for most fully integrated recruitment,
-              selection and applicant tracking system called NEOGOV Insight designed specifically for public sector employers</p>
+              selection and applicant tracking system called NEOGOV Insight designed specifically for public sector employers.</p>
 
           </Grid>
         </Grid>
@@ -64,27 +64,13 @@ const Jobs = () => {
           </Grid>
           <Grid item xs className={classes.items}>
 
-            <p>At CareerBuilder, we’ve been giving people the tools they need to find personal
+            <p>At CareerBuilder, we&apos;ve been giving people the tools they need to find personal
               success for the last 20+ years from the hundreds of thousands of employers
               seeking great talent to the millions of jobseekers out there looking for the right opportunities. </p>
 
           </Grid>
         </Grid>
       </Box>
-      {/* <Box p={2} mb={2} className={classes.wrapper}>
-        <Grid container alignItems="center">
-          <Grid item xs className={classes.jobs}>
-            <Typography variant='subtitle1'><Link href="https://www2.ed.gov"><a>Education For Immigrant</a></Link></Typography>
-          </Grid>
-          <Grid item xs className={classes.items}>
-
-            <p>ED administers some 200 programs, publishes many reports annually,
-              and maintains thousands of web pages.
-              One major goal of ED.gov is to help you find things and accomplish whatever you came to ED.gov to do</p>
-
-          </Grid>
-        </Grid>
-      </Box> */}
       <Box p={2} mb={2} className={classes.wrapper}>
         <Grid container alignItems="center">
           <Grid item xs className={classes.jobs}>
@@ -92,36 +78,36 @@ const Jobs = () => {
           </Grid>
           <Grid item xs className={classes.items}>
 
-            <p> Find Work At Home Opportunitie</p>
+            <p> Find Work At Home Opportunitie.</p>
 
           </Grid>
         </Grid>
       </Box>
-      {/* <Box p={2} mb={2} className={classes.wrapper}>
+      <Box p={2} mb={2} className={classes.wrapper}>
         <Grid container alignItems="center">
           <Grid item xs className={classes.jobs}>
-            <Typography variant='subtitle1'><Link href="https://www.worldtrips.com"><a>Bettsrecruiting</a></Link></Typography>
+            <Typography variant='subtitle1'><Link href="https://bettsrecruiting.com/"><a>Bettsrecruiting</a></Link></Typography>
           </Grid>
           <Grid item xs className={classes.items}>
 
-            <p> This is a good website that you can find job easily</p>
+            <p> This is a good website that you can find job easily.</p>
 
           </Grid>
         </Grid>
-      </Box> */}
-      {/* <Box p={2} mb={2} className={classes.wrapper}>
+      </Box>
+      <Box p={2} mb={2} className={classes.wrapper}>
         <Grid container alignItems="center">
           <Grid item xs className={classes.jobs}>
             <Typography variant='subtitle1'> <Link href="https://usahello.org/"><a>USAHello</a></Link></Typography>
           </Grid>
           <Grid item xs className={classes.items}>
 
-            <p> This is a good website that you can find job easily</p>
+            <p> This is a good website that you can find job easily.</p>
 
           </Grid>
         </Grid>
 
-      </Box> */}
+      </Box>
 
     </>
   )

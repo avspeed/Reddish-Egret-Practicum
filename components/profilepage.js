@@ -95,6 +95,7 @@ export default function ProfilePage({ currentUser, updateUserInfo }) {
           />
 
           <Image
+            unoptimized={true}
             src={user.userImageUrl}
             alt="avatar"
             width={400}
